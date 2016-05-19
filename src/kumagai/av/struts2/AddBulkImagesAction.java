@@ -146,6 +146,8 @@ public class AddBulkImagesAction
 			}
 		}
 
+		connection.close();
+
 		return result;
 	}
 }

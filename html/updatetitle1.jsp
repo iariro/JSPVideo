@@ -62,12 +62,13 @@
 			</table>
 		</s:form>
 
-		<form method="POST" enctype="multipart/form-data" action="UploadServlet">
+		<s:form action="uploadimage" method="post" enctype="multipart/form-data" theme="simple">
 			ファイルパス：
-			<input type="file" name="filename" size="75" />
-			メモ ： <input type="text" name="note"><br/>
+			<input type="file" name="uploadfile" size="75" />
+			<input type="hidden" name="titleId" value="<s:property value='titleId' />">
+			<input type="hidden" name="dmmUrlCid" value="<s:property value='dmmUrlCid' />">
 			<input type="submit" value="アップロード" />
-		</form>
+		</s:form>
 		</div>
 		</div>
 

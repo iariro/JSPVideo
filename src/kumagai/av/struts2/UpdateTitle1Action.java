@@ -27,6 +27,7 @@ public class UpdateTitle1Action
 	public String imageFile1;
 	public String imageFile2;
 	public String imageFile3;
+	public int imageFileCount;
 
 	/**
 	 * タイトル情報更新ページ表示アクション。
@@ -50,6 +51,8 @@ public class UpdateTitle1Action
 			ImageCollection.getFileNamesById(connection, titleId);
 
 		connection.close();
+
+		imageFileCount = imageFiles.size();
 
 		if (title2 != null)
 		{
