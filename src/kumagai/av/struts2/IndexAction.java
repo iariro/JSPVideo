@@ -54,6 +54,15 @@ public class IndexAction
 	{
 		ServletContext context = ServletActionContext.getServletContext();
 
+		if (context.getInitParameter("AVSqlserverUrl") == null ||
+			context.getInitParameter("AVRandomOriginDate") == null ||
+			context.getInitParameter("AVRandomAdjust") == null)
+		{
+			this.exception = "必要なパラメータ定義が揃っていません";
+
+			return "error";
+		}
+
 		DriverManager.registerDriver(new SQLServerDriver());
 
 		try
