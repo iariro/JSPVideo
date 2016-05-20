@@ -5,7 +5,6 @@ import java.io.*;
 import java.util.*;
 import java.sql.*;
 import javax.imageio.*;
-import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
 import javax.servlet.*;
 import com.microsoft.sqlserver.jdbc.*;
 import org.apache.struts2.*;
@@ -56,25 +55,28 @@ public class UploadImageAction
 					ImageCollection.getFileNamesById(connection, Integer.toString(titleId));
 
 				BufferedImage sourceImage = ImageIO.read(uploadfile);
-				int width = sourceImage.getWidth() / 2;
-				int height = sourceImage.getHeight() / 2;
-				BufferedImage reduceImage = new BufferedImage(width, height, sourceImage.getType());
-				reduceImage.getGraphics().drawImage(sourceImage.getScaledInstance(width, height, java.awt.Image.SCALE_AREA_AVERAGING), 0, 0, width, height, null);
+				int width = sourceImage.getWidth();
+				int height = sourceImage.getHeight();
+				int maxWidth = 700;
+				int maxHeight = 480;
+
+				while ((width > maxWidth) || (height > maxHeight))
+				{
+					width /= 2;
+					height /= 2;
+				}
 
 				File destinationFile =
 					new File(
 						filePath,
-						String.format("%s_%s.jpg", dmmUrlCid, imageFiles.size() + 1));
-
-				JPEGImageWriteParam param = new JPEGImageWriteParam(Locale.getDefault());
-				param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-
-				ImageWriter writer = ImageIO.getImageWritersByFormatName("jpg").next();
-				writer.setOutput(ImageIO.createImageOutputStream(destinationFile));
-				writer.write(null, new IIOImage(reduceImage, null, null), param);
-				writer.dispose();
+						String.format("%s_%s.png", dmmUrlCid, imageFiles.size() + 1));
 
 				createFileName = destinationFile.getName();
+
+				BufferedImage image = ImageIO.read(uploadfile);
+				BufferedImage thumb = new BufferedImage(width, height, image.getType());
+				thumb.getGraphics().drawImage(image.getScaledInstance(width, height, java.awt.Image.SCALE_AREA_AVERAGING), 0, 0, width, height, null);
+				ImageIO.write(thumb, "PNG", destinationFile);
 
 				ImageCollection.insert(
 					connection,
