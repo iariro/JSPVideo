@@ -23,10 +23,36 @@ import kumagai.av.*;
 })
 public class UploadImageAction
 {
+	static private final int maxWidth = 700;
+	static private final int maxHeight = 480;
+
+	/**
+	 * 画像形式取得
+	 * @param contentType image/pngといった文字列
+	 * @return pngやjpgといった文字列
+	 */
+	static public String getImageType(String contentType)
+	{
+		String imageType = null;
+		String [] contentTypeFields = contentType.split("/");
+
+		if (contentTypeFields.length == 2)
+		{
+			if (contentTypeFields[0].equals("image"))
+			{
+				imageType = contentTypeFields[1];
+			}
+		}
+
+		return imageType;
+	}
+
 	public File uploadfile;
+	public String uploadfileContentType;
+	public String uploadfileFileName;
 	public int titleId;
 	public String dmmUrlCid;
-	public String createFileName;
+	public String destinationFileName;
 	public String message;
 	public String exception;
 
@@ -38,27 +64,34 @@ public class UploadImageAction
 	public String execute()
 		throws Exception
 	{
-		ServletContext context = ServletActionContext.getServletContext();
-
-		String filePath = context.getInitParameter("AVImageFolder");
-		String dbUrl = context.getInitParameter("AVSqlserverUrl");
-
-		if (uploadfile != null && filePath != null && dbUrl != null)
+		try
 		{
-			try
+			ServletContext context = ServletActionContext.getServletContext();
+
+			String folderPath = context.getInitParameter("AVImageFolder");
+			String dbUrl = context.getInitParameter("AVSqlserverUrl");
+
+			// 画像形式取得
+			String imageType = getImageType(uploadfileContentType);
+
+			if (uploadfile != null &&
+				folderPath != null &&
+				dbUrl != null &&
+				imageType != null)
 			{
 				DriverManager.registerDriver(new SQLServerDriver());
 
 				Connection connection = DriverManager.getConnection(dbUrl);
 
+				// 現在の画像数を求める
 				ArrayList<Image> imageFiles =
-					ImageCollection.getFileNamesById(connection, Integer.toString(titleId));
+					ImageCollection.getFileNamesById
+						(connection, Integer.toString(titleId));
 
+				// リサイズ
 				BufferedImage sourceImage = ImageIO.read(uploadfile);
 				int width = sourceImage.getWidth();
 				int height = sourceImage.getHeight();
-				int maxWidth = 700;
-				int maxHeight = 480;
 
 				while ((width > maxWidth) || (height > maxHeight))
 				{
@@ -68,40 +101,56 @@ public class UploadImageAction
 
 				File destinationFile =
 					new File(
-						filePath,
-						String.format("%s_%s.png", dmmUrlCid, imageFiles.size() + 1));
+						folderPath,
+						String.format(
+							"%s_%s.%s",
+							dmmUrlCid,
+							imageFiles.size() + 1,
+							imageType));
 
-				createFileName = destinationFile.getName();
-
-				BufferedImage image = ImageIO.read(uploadfile);
-				BufferedImage thumb = new BufferedImage(width, height, image.getType());
-				thumb.getGraphics().drawImage(image.getScaledInstance(width, height, java.awt.Image.SCALE_AREA_AVERAGING), 0, 0, width, height, null);
-				ImageIO.write(thumb, "PNG", destinationFile);
+				destinationFileName = destinationFile.getName();
+				BufferedImage resizeImage =
+					new BufferedImage(width, height, sourceImage.getType());
+				java.awt.Image resizeImage2 =
+					sourceImage.getScaledInstance
+						(width, height, java.awt.Image.SCALE_AREA_AVERAGING);
+				resizeImage.getGraphics().drawImage
+					(resizeImage2, 0, 0, width, height, null);
+				ImageIO.write(resizeImage, imageType, destinationFile);
 
 				ImageCollection.insert(
 					connection,
 					titleId,
 					imageFiles.size(),
-					createFileName);
+					destinationFileName);
 
 				message =
 					String.format(
 						"%s %s %s",
 						titleId,
 						imageFiles.size(),
-						createFileName);
+						destinationFileName);
 
 				connection.close();
 
 				return "success";
 			}
-			finally
+			else
 			{
+				exception =
+					String.format(
+						"uploadfile=%s folderPath=%s dbUrl=%s imageType=%s",
+						uploadfile,
+						folderPath,
+						dbUrl,
+						imageType);
+
+				return "error";
 			}
 		}
-		else
+		catch (Exception exception)
 		{
-			exception = String.format("uploadfile = %s || filePath = %s || dbUrl = %s", uploadfile, filePath, dbUrl);
+			this.exception = exception.getMessage();
 
 			return "error";
 		}
