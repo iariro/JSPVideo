@@ -52,11 +52,25 @@
 				<td>
 				<a href="http://search.yahoo.co.jp/search?p=<s:property value="title" />&ei=UTF-8&fr=mozff">Y!</a>
 				<a href="http://auctions.search.yahoo.co.jp/search?p=<s:property value="title" />&auccat=26164&aq=-1&oq=&ei=UTF-8&tab_ex=commerce&slider=0">Y!</a>
+
+				<s:if test="%{dmmUrl!=null}">
+				<a href="<s:property value="dmmUrl" />">DMM</a>
+				</s:if>
+				<s:else>
 				<a href="http://www.dmm.co.jp/search/=/searchstr=<s:property value="title" />/analyze=V1EBC1YOUAo_/n1=FgRCTw9VBA4GCF5WXA__/n2=Aw1fVhQKX19XC15nV0AC/sort=ranking/">DMM</a>
+				</s:else>
+
 				<a href="http://www.arzon.jp/itemlist.html?t=&m=all&s=&q=<s:property value="title" />">arzon</a>
 				</td>
 				<td><s:property value="media" /></td>
-				<td><a href="imagelist.action?titleid=<s:property value="id" />"><img src="/kumagai/image?folder=AVImageFolder&filename=<s:property value="fileName" />" width="80" height="59"></a></td>
+				<td><a href="imagelist.action?titleid=<s:property value="id" />">
+					<s:if test="%{dmmUrl!=null}">
+					<img src="<s:property value="dmmImageUrlPs" />" width="78" height="100">
+					</s:if>
+					<s:else>
+					<img src="/kumagai/image?folder=AVImageFolder&filename=<s:property value="fileName" />" width="80" height="59">
+					</s:else>
+				</a></td>
 				<td><s:property value="releaseDateString" /></td>
 
 				<td>
