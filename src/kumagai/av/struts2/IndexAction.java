@@ -42,6 +42,7 @@ public class IndexAction
 	public Title3 title3;
 	public String date1;
 	public String date2;
+	public String message;
 	public Exception exception;
 
 	/**
@@ -58,7 +59,7 @@ public class IndexAction
 			context.getInitParameter("AVRandomOriginDate") == null ||
 			context.getInitParameter("AVRandomAdjust") == null)
 		{
-			this.exception = "必要なパラメータ定義が揃っていません";
+			message = "必要なパラメータ定義が揃っていません";
 
 			return "error";
 		}
