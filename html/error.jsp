@@ -18,6 +18,7 @@
 	<div class=day>
 
 		<h3>例外</h3>
+		<li><s:property value="message" />
 		<li><s:property value="exception" />
 
 	</div>
