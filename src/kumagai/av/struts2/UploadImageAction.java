@@ -1,5 +1,7 @@
 package kumagai.av.struts2;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.image.*;
 import java.io.*;
 import java.util.*;
@@ -25,6 +27,49 @@ public class UploadImageAction
 {
 	static private final int maxWidth = 700;
 	static private final int maxHeight = 480;
+
+	/**
+	 * 画像変換テストコード。
+	 * @param args [0]=変換元 [1]=変換先
+	 * @throws IOException
+	 */
+	static public void main(String [] args)
+		throws IOException
+	{
+		if (args.length >= 2)
+		{
+			File sourceFile = new File(args[0]);
+			File destinationFile = new File(args[1]);
+			toJpegAndResize(sourceFile, destinationFile);
+		}
+	}
+
+	/**
+	 * PNGからjPEGへの変換とリサイズ。
+	 * @param sourceImage
+	 * @param width リサイズする幅
+	 * @param height リサイズする高さ
+	 * @return リサイズした画像
+	 */
+	static void toJpegAndResize(File sourceFile, File destinationFile)
+		throws IOException
+	{
+		BufferedImage sourceImage = ImageIO.read(sourceFile);
+		int width = sourceImage.getWidth();
+		int height = sourceImage.getHeight();
+
+		while ((width > maxWidth) || (height > maxHeight))
+		{
+			width /= 2;
+			height /= 2;
+		}
+
+		BufferedImage resizeImage =
+			new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		Graphics2D off = resizeImage.createGraphics();
+		off.drawImage(sourceImage, 0, 0, Color.WHITE, null);
+		ImageIO.write(resizeImage, "jpg", destinationFile);
+	}
 
 	/**
 	 * 画像形式取得
@@ -89,34 +134,16 @@ public class UploadImageAction
 						(connection, Integer.toString(titleId));
 
 				// リサイズ
-				BufferedImage sourceImage = ImageIO.read(uploadfile);
-				int width = sourceImage.getWidth();
-				int height = sourceImage.getHeight();
-
-				while ((width > maxWidth) || (height > maxHeight))
-				{
-					width /= 2;
-					height /= 2;
-				}
-
 				File destinationFile =
 					new File(
 						folderPath,
 						String.format(
-							"%s_%s.%s",
+							"%s_%02d.%s",
 							dmmUrlCid,
 							imageFiles.size() + 1,
 							imageType));
 
-				destinationFileName = destinationFile.getName();
-				BufferedImage resizeImage =
-					new BufferedImage(width, height, sourceImage.getType());
-				java.awt.Image resizeImage2 =
-					sourceImage.getScaledInstance
-						(width, height, java.awt.Image.SCALE_AREA_AVERAGING);
-				resizeImage.getGraphics().drawImage
-					(resizeImage2, 0, 0, width, height, null);
-				ImageIO.write(resizeImage, imageType, destinationFile);
+				toJpegAndResize(uploadfile, destinationFile);
 
 				ImageCollection.insert(
 					connection,
