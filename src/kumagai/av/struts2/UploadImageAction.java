@@ -1,7 +1,5 @@
 package kumagai.av.struts2;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.image.*;
 import java.io.*;
 import java.util.*;
@@ -65,9 +63,12 @@ public class UploadImageAction
 		}
 
 		BufferedImage resizeImage =
-			new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-		Graphics2D off = resizeImage.createGraphics();
-		off.drawImage(sourceImage, 0, 0, Color.WHITE, null);
+			new BufferedImage(width-1, height, BufferedImage.TYPE_INT_RGB);
+		java.awt.Image resizeImage2 =
+			sourceImage.getScaledInstance
+				(width, height, java.awt.Image.SCALE_AREA_AVERAGING);
+		resizeImage.getGraphics().drawImage
+			(resizeImage2, 0, 0, width, height, null);
 		ImageIO.write(resizeImage, "jpg", destinationFile);
 	}
 
@@ -141,7 +142,8 @@ public class UploadImageAction
 							"%s_%02d.%s",
 							dmmUrlCid,
 							imageFiles.size() + 1,
-							imageType));
+							"jpg"));
+				destinationFileName = destinationFile.getName();
 
 				toJpegAndResize(uploadfile, destinationFile);
 
