@@ -134,18 +134,32 @@ public class UploadImageAction
 					ImageCollection.getFileNamesById
 						(connection, Integer.toString(titleId));
 
-				// リサイズ
-				File destinationFile =
+				File subFolder =
 					new File(
 						folderPath,
-						String.format(
-							"%s_%02d.%s",
-							dmmUrlCid,
-							imageFiles.size() + 1,
-							"jpg"));
-				destinationFileName = destinationFile.getName();
+						dmmUrlCid.substring(0, 1));
 
+				if (!subFolder.exists())
+				{
+					new File(subFolder.getPath()).mkdir();
+				}
+
+				destinationFileName =
+					String.format(
+						"%s_%02d.%s",
+						dmmUrlCid,
+						imageFiles.size() + 1,
+						"jpg");
+
+				File destinationFile = new File(subFolder, destinationFileName);
+
+				// リサイズ
 				toJpegAndResize(uploadfile, destinationFile);
+
+				destinationFileName =
+					new File(
+						dmmUrlCid.substring(0, 1),
+						destinationFileName).getPath();
 
 				ImageCollection.insert(
 					connection,
