@@ -64,7 +64,10 @@ public class UpdateTitle1Action
 			releaseDate = title2.getReleasedate();
 			memo = title2.getMemo();
 			dmmUrl = title2.dmmUrl;
-			dmmUrlCid = Title1.getCid(dmmUrl);
+			if (dmmUrl != null)
+			{
+				dmmUrlCid = Title1.getCid(dmmUrl);
+			}
 
 			if (imageFiles.size() >= 1)
 			{
