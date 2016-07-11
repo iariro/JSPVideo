@@ -13,12 +13,17 @@ import kumagai.av.*;
  * @author kumagai
  */
 @Namespace("/av")
-@Result(name="success", location="/av/imagelist.jsp")
+@Results
+({
+	@Result(name="success", location="/av/imagelist.jsp"),
+	@Result(name="error", location="/av/error.jsp")
+})
 public class ImageListAction
 {
 	public String titleid;
 	public String dmmImageUrl;
 	public ArrayList<Image> images;
+	public String message;
 
 	/**
 	 * 画像リスト表示アクション用フォーム。
@@ -29,26 +34,43 @@ public class ImageListAction
 		throws Exception
 	{
 		ServletContext context = ServletActionContext.getServletContext();
+		String url = context.getInitParameter("AVSqlserverUrl");
 
-		DriverManager.registerDriver(new SQLServerDriver());
-
-		Connection connection =
-			DriverManager.getConnection
-				(context.getInitParameter("AVSqlserverUrl"));
-
-		Title1 title = TitleCollection.getOneTitle1(connection, titleid);
-
-		images = ImageCollection.getFileNamesById(connection, titleid);
-
-		if (title.dmmUrl != null)
+		if (url != null)
 		{
-			// DMM URLは存在する
+			DriverManager.registerDriver(new SQLServerDriver());
 
-			dmmImageUrl = Title1.getDmmImageUrlPl(title.dmmUrl);
+			try
+			{
+				Connection connection = DriverManager.getConnection(url);
+
+				Title1 title = TitleCollection.getOneTitle1(connection, titleid);
+
+				images = ImageCollection.getFileNamesById(connection, titleid);
+
+				if (title.dmmUrl != null)
+				{
+					// DMM URLは存在する
+
+					dmmImageUrl = Title1.getDmmImageUrlPl(title.dmmUrl);
+				}
+
+				connection.close();
+
+				return "success";
+			}
+			catch (SQLServerException exception)
+			{
+				this.message = exception.getMessage();
+
+				return "error";
+			}
 		}
+		else
+		{
+			message = "必要なパラメータ定義が揃っていません";
 
-		connection.close();
-
-		return "success";
+			return "error";
+		}
 	}
 }
