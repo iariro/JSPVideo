@@ -47,7 +47,6 @@ public class UploadImageAction
 	 * @param sourceImage
 	 * @param width リサイズする幅
 	 * @param height リサイズする高さ
-	 * @return リサイズした画像
 	 */
 	static void toJpegAndResize(File sourceFile, File destinationFile)
 		throws IOException
