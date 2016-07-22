@@ -1,6 +1,5 @@
 package kumagai.av;
 
-import java.io.*;
 import java.sql.*;
 import java.util.*;
 
@@ -280,7 +279,9 @@ public class ImageCollection
 	{
 		InvalidImageFiles invalidImageFiles = new InvalidImageFiles();
 
-		for (String file : new File(filePath).list())
+		ArrayList<String> files = new RecursiveFilePathArray(filePath);
+
+		for (String file : files)
 		{
 			invalidImageFiles.notReferredFiles.add(file);
 		}
