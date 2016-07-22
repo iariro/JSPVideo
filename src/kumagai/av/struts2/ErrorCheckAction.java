@@ -13,7 +13,11 @@ import kumagai.av.*;
  * @author kumagai
  */
 @Namespace("/av")
-@Result(name="success", location="/av/errorcheck.jsp")
+@Results
+({
+	@Result(name="success", location="/av/errorcheck.jsp"),
+	@Result(name="error", location="/av/error.jsp")
+})
 public class ErrorCheckAction
 {
 	public ArrayList<String> notReferredFiles;
@@ -36,31 +40,37 @@ public class ErrorCheckAction
 	{
 		ServletContext context = ServletActionContext.getServletContext();
 
-		DriverManager.registerDriver(new SQLServerDriver());
-
-		Connection connection =
-			DriverManager.getConnection
-				(context.getInitParameter("AVSqlserverUrl"));
-
-		ImageCollection imageCollection = new ImageCollection(connection);
-
+		String url = context.getInitParameter("AVSqlserverUrl");
 		String filePath = context.getInitParameter("AVImageFolder");
 
-		InvalidImageFiles invalidImageFiles =
-			imageCollection.getNotExistFiles(filePath);
+		if (url != null && filePath != null)
+		{
+			DriverManager.registerDriver(new SQLServerDriver());
 
-		notReferredFiles = invalidImageFiles.notReferredFiles;
-		notExistFiles = invalidImageFiles.notExistFiles;
-		duplicateFiles = ImageCollection.getDuplicateFile(connection);
-		noRefferedImage = ImageCollection.getNoRefferedImage(connection);
-		titleMemo = TitleCollection.getTitleMemo(connection);
-		notWatchTitles = TitleCollection.getNotWatchTitles(connection);
-		notExistTitleWatch = WatchCollection.getNotExistTitleWatch(connection);
-		invalidDate = WatchCollection.getInvalidDate(connection);
-		duplicateReview = DiaryReviewCollection.getDuplicateReview(connection);
+			Connection connection = DriverManager.getConnection(url);
 
-		connection.close();
+			ImageCollection imageCollection = new ImageCollection(connection);
 
-		return "success";
+			InvalidImageFiles invalidImageFiles =
+				imageCollection.getNotExistFiles(filePath);
+
+			notReferredFiles = invalidImageFiles.notReferredFiles;
+			notExistFiles = invalidImageFiles.notExistFiles;
+			duplicateFiles = ImageCollection.getDuplicateFile(connection);
+			noRefferedImage = ImageCollection.getNoRefferedImage(connection);
+			titleMemo = TitleCollection.getTitleMemo(connection);
+			notWatchTitles = TitleCollection.getNotWatchTitles(connection);
+			notExistTitleWatch = WatchCollection.getNotExistTitleWatch(connection);
+			invalidDate = WatchCollection.getInvalidDate(connection);
+			duplicateReview = DiaryReviewCollection.getDuplicateReview(connection);
+
+			connection.close();
+
+			return "success";
+		}
+		else
+		{
+			return "error";
+		}
 	}
 }
