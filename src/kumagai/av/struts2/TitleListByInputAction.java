@@ -79,7 +79,7 @@ public class TitleListByInputAction
 				connection,
 				false,
 				false,
-				"updatedate desc",
+				"updatedate desc, rentaldate desc",
 				date,
 				diaryReviewCollection);
 
