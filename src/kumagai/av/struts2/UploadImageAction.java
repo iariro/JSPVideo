@@ -92,9 +92,9 @@ public class UploadImageAction
 		return imageType;
 	}
 
-	public File uploadfile;
-	public String uploadfileContentType;
-	public String uploadfileFileName;
+	public File [] uploadfile;
+	public String [] uploadfileContentType;
+	public String [] uploadfileFileName;
 	public int titleId;
 	public String dmmUrlCid;
 	public String destinationFileName;
@@ -116,13 +116,9 @@ public class UploadImageAction
 			String folderPath = context.getInitParameter("AVImageFolder");
 			String dbUrl = context.getInitParameter("AVSqlserverUrl");
 
-			// 画像形式取得
-			String imageType = getImageType(uploadfileContentType);
-
 			if (uploadfile != null &&
 				folderPath != null &&
-				dbUrl != null &&
-				imageType != null)
+				dbUrl != null)
 			{
 				DriverManager.registerDriver(new SQLServerDriver());
 
@@ -133,45 +129,44 @@ public class UploadImageAction
 					ImageCollection.getFileNamesById
 						(connection, Integer.toString(titleId));
 
-				File subFolder =
-					new File(
-						folderPath,
-						dmmUrlCid.substring(0, 1));
+				File subFolder = new File(folderPath, dmmUrlCid.substring(0, 1));
 
 				if (!subFolder.exists())
 				{
 					new File(subFolder.getPath()).mkdir();
 				}
 
-				destinationFileName =
-					String.format(
-						"%s_%02d.%s",
-						dmmUrlCid,
-						imageFiles.size() + 1,
-						"jpg");
+				int imageId = imageFiles.size() + 1;
 
-				File destinationFile = new File(subFolder, destinationFileName);
+				for (int i=0 ; i<uploadfile.length ; i++)
+				{
+					destinationFileName =
+						String.format("%s_%02d.%s", dmmUrlCid, imageId, "jpg");
 
-				// リサイズ
-				toJpegAndResize(uploadfile, destinationFile);
+					File destinationFile = new File(subFolder, destinationFileName);
 
-				destinationFileName =
-					new File(
-						dmmUrlCid.substring(0, 1),
-						destinationFileName).getPath();
+					// リサイズ
+					toJpegAndResize(uploadfile[i], destinationFile);
 
-				ImageCollection.insert(
-					connection,
-					titleId,
-					imageFiles.size(),
-					destinationFileName);
+					destinationFileName =
+						new File(
+							dmmUrlCid.substring(0, 1),
+							destinationFileName).getPath();
 
-				message =
-					String.format(
-						"%s %s %s",
+					ImageCollection.insert(
+						connection,
 						titleId,
-						imageFiles.size(),
+						imageId,
 						destinationFileName);
+
+					imageId++;
+
+					if (i > 0)
+					{
+						message += ", ";
+					}
+					message += destinationFileName;
+				}
 
 				connection.close();
 
@@ -181,11 +176,10 @@ public class UploadImageAction
 			{
 				exception =
 					String.format(
-						"uploadfile=%s folderPath=%s dbUrl=%s imageType=%s",
+						"uploadfile=%s folderPath=%s dbUrl=%s",
 						uploadfile,
 						folderPath,
-						dbUrl,
-						imageType);
+						dbUrl);
 
 				return "error";
 			}
