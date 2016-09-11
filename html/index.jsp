@@ -51,6 +51,10 @@
 				<s:textfield name="date" value="%{date1}" />
 			</s:form>
 
+			<s:form action="titlelistbypurchasenoimage" theme="simple">
+				<s:submit value="画像なし購入済みリスト表示" />
+			</s:form>
+
 			<s:form action="titlestatushistory" theme="simple">
 				<s:submit value="作品の状態履歴一覧表示" />
 			</s:form>

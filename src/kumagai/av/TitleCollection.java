@@ -238,6 +238,33 @@ public class TitleCollection
 	}
 
 	/**
+	 * 画像なし購入作品リストを取得。
+	 * @param connection DB接続オブジェクト
+	 * @return 画像なし購入作品リスト
+	 */
+	static public ArrayList<Title2> getPurchasedAndNoImageList(Connection connection)
+		throws SQLException, ParseException
+	{
+		String sql = "select * from title join watch w1 on w1.titleid=title.id where title.id not in (select titleid from image) and (w1.sequence=(select MAX(w2.sequence) from watch w2 where w2.titleid=w1.titleid) or w1.sequence is null) and buydate<>'' and w1.memo<>'売却' order by buydate";
+
+		Statement statement = connection.createStatement();
+
+		ResultSet results = statement.executeQuery(sql);
+
+		ArrayList<Title2> titleCollection = new ArrayList<Title2>();
+
+		while (results.next())
+		{
+			titleCollection.add(new Title2(results));
+		}
+
+		results.close();
+		statement.close();
+
+		return titleCollection;
+	}
+
+	/**
 	 * 視聴されていないタイトルを検出。
 	 * @param connection DB接続オブジェクト
 	 * @return 視聴されていないタイトル

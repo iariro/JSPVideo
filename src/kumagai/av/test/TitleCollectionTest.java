@@ -1,6 +1,7 @@
 package kumagai.av.test;
 
 import java.sql.*;
+import java.util.*;
 import java.text.ParseException;
 import junit.framework.*;
 import kumagai.av.*;
@@ -89,5 +90,23 @@ public class TitleCollectionTest
 				diaryReviewCollection);
 
 		connection.close();
+	}
+
+	public void testGetPurchasedAndNoImageList()
+		throws SQLException, ParseException
+	{
+		Connection connection =
+			DriverManager.getConnection(
+				"jdbc:sqlserver://localhost:2144;DatabaseName=AV;User=sa;Password=p@ssw0rd;");
+
+		ArrayList<Title2> titleCollection =
+			TitleCollection.getPurchasedAndNoImageList(connection);
+
+		connection.close();
+
+		for (Title2 title : titleCollection)
+		{
+			System.out.println(title);
+		}
 	}
 }
