@@ -29,7 +29,6 @@ public class RecursiveFilePathArray
 
 	/**
 	 * 再帰的にファイルパスのコレクションを構築。
-	 * @param relativePath 相対パス
 	 * @param file ディレクトリ
 	 */
 	public RecursiveFilePathArray(String file)
