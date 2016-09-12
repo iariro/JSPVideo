@@ -13,8 +13,12 @@
 
 		<div class=hatena-body>
 		<div class=main>
-		<s:property value='createFileName' />をアップロードしました。<br>
-		<s:property value='message' /><br>
+		<ul>
+		<s:iterator value="uploadedFiles">
+			<li><s:property /></td>
+		</s:iterator>
+		</ul>
+		をアップロードしました。<br>
 		</div>
 		</div>
 

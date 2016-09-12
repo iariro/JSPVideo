@@ -98,7 +98,7 @@ public class UploadImageAction
 	public int titleId;
 	public String dmmUrlCid;
 	public String destinationFileName;
-	public String message;
+	public ArrayList<String> uploadedFiles = new ArrayList<String>();
 	public String exception;
 
 	/**
@@ -161,11 +161,7 @@ public class UploadImageAction
 
 					imageId++;
 
-					if (i > 0)
-					{
-						message += ", ";
-					}
-					message += destinationFileName;
+					uploadedFiles.add(destinationFileName);
 				}
 
 				connection.close();
