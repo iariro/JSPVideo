@@ -157,7 +157,7 @@ public class TitleCollection
 		throws SQLException
 	{
 		String sql =
-			"select title, rentaldate, buydate, watch, dmmurl, watch.memo from title left join watch on watch.titleid=title.id where title.id=? order by sequence desc";
+			"select title.id, title, rentaldate, buydate, watch, dmmurl, watch.memo from title left join watch on watch.titleid=title.id where title.id=? order by sequence desc";
 
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setString(1, titleId);
