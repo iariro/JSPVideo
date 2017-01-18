@@ -100,7 +100,7 @@ public class TitleCollectionTest
 				"jdbc:sqlserver://localhost:2144;DatabaseName=AV;User=sa;Password=p@ssw0rd;");
 
 		ArrayList<Title2> titleCollection =
-			TitleCollection.getPurchasedAndNoImageList(connection);
+			TitleCollection.getPurchasedAndNoImageList(connection, 1);
 
 		connection.close();
 

@@ -240,16 +240,27 @@ public class TitleCollection
 	/**
 	 * 画像なし購入作品リストを取得。
 	 * @param connection DB接続オブジェクト
+	 * @param imageCount 画像数
 	 * @return 画像なし購入作品リスト
 	 */
-	static public ArrayList<Title2> getPurchasedAndNoImageList(Connection connection)
+	static public ArrayList<Title2> getPurchasedAndNoImageList(Connection connection, int imageCount)
 		throws SQLException, ParseException
 	{
-		String sql = "select * from title join watch w1 on w1.titleid=title.id where title.id not in (select titleid from image) and (w1.sequence=(select MAX(w2.sequence) from watch w2 where w2.titleid=w1.titleid) or w1.sequence is null) and buydate<>'' and w1.memo<>'売却' order by buydate";
+		PreparedStatement statement;
 
-		Statement statement = connection.createStatement();
+		if (imageCount == 0)
+		{
+			String sql = "select * from title join watch w1 on w1.titleid=title.id where title.id not in (select titleid from image) and (w1.sequence=(select MAX(w2.sequence) from watch w2 where w2.titleid=w1.titleid) or w1.sequence is null) and buydate<>'' and w1.memo<>'売却' order by buydate";
+			statement = connection.prepareStatement(sql);
+		}
+		else
+		{
+			String sql = String.format("select * from title join watch w1 on w1.titleid=title.id where title.id in (select titleid from image group by titleid having count(*)=?) and (w1.sequence=(select MAX(w2.sequence) from watch w2 where w2.titleid=w1.titleid) or w1.sequence is null) and buydate<>'' and w1.memo<>'売却' order by buydate");
+			statement = connection.prepareStatement(sql);
+			statement.setInt(1, imageCount);
+		}
 
-		ResultSet results = statement.executeQuery(sql);
+		ResultSet results = statement.executeQuery();
 
 		ArrayList<Title2> titleCollection = new ArrayList<Title2>();
 

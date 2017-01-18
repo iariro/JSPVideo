@@ -16,7 +16,11 @@ import kumagai.av.*;
 @Result(name="success", location="/av/titlelistbypurchasenoimage.jsp")
 public class TitleListByPurchaseNoImageAction
 {
+	public int imageCount;
+
 	public ArrayList<Title2> titleCollection;
+
+	public int size;
 
 	/**
 	 * 購入日順全タイトルリスト表示アクション。
@@ -34,7 +38,9 @@ public class TitleListByPurchaseNoImageAction
 			DriverManager.getConnection
 				(context.getInitParameter("AVSqlserverUrl"));
 
-		titleCollection = TitleCollection.getPurchasedAndNoImageList(connection);
+		titleCollection = TitleCollection.getPurchasedAndNoImageList(connection, imageCount);
+
+		size = titleCollection.size();
 
 		connection.close();
 
