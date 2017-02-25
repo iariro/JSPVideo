@@ -53,7 +53,7 @@
 
 			<s:form action="titlelistbypurchasenoimage" theme="simple">
 				<s:submit value="画像なし購入済みリスト表示" />
-				<s:select name="imageCount" list="#{ '1':'1', '0':'0' }" />
+				<s:select name="imageCount" list="#{ '3':'3', '2':'2', '1':'1', '0':'0' }" />
 			</s:form>
 
 			<s:form action="titlestatushistory" theme="simple">
