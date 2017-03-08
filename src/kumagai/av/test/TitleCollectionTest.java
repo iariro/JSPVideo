@@ -99,12 +99,12 @@ public class TitleCollectionTest
 			DriverManager.getConnection(
 				"jdbc:sqlserver://localhost:2144;DatabaseName=AV;User=sa;Password=p@ssw0rd;");
 
-		ArrayList<Title2> titleCollection =
+		ArrayList<Title3> titleCollection =
 			TitleCollection.getPurchasedAndNoImageList(connection, 1);
 
 		connection.close();
 
-		for (Title2 title : titleCollection)
+		for (Title3 title : titleCollection)
 		{
 			System.out.println(title);
 		}

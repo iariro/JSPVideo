@@ -118,7 +118,9 @@ public class UploadImageAction
 
 			if (uploadfile != null &&
 				folderPath != null &&
-				dbUrl != null)
+				dbUrl != null &&
+				dmmUrlCid != null &&
+				dmmUrlCid.length() > 0)
 			{
 				DriverManager.registerDriver(new SQLServerDriver());
 
@@ -172,17 +174,18 @@ public class UploadImageAction
 			{
 				exception =
 					String.format(
-						"uploadfile=%s folderPath=%s dbUrl=%s",
+						"uploadfile=%s folderPath=%s dbUrl=%s dmmUrlCid=%s",
 						uploadfile,
 						folderPath,
-						dbUrl);
+						dbUrl,
+						dmmUrlCid);
 
 				return "error";
 			}
 		}
 		catch (Exception exception)
 		{
-			this.exception = exception.getMessage();
+			this.exception = exception.toString();
 
 			return "error";
 		}

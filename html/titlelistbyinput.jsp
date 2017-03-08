@@ -5,7 +5,7 @@
 <html>
 	<head>
 		<title>全タイトル一覧 - 入力日順</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<link rel="stylesheet" type="text/css" href="hatena.css">
 	</head>
 
@@ -56,7 +56,7 @@
 				</td>
 				<td><s:property value="media" /></td>
 				<td><a href="imagelist.action?titleid=<s:property value="id" />">
-					<s:if test="%{dmmUrl!=null}">
+					<s:if test="%{dmmUrl.length()>0}">
 					<img src="<s:property value="dmmImageUrlPs" />" width="78" height="100">
 					</s:if>
 					<s:else>

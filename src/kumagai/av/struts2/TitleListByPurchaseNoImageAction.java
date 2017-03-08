@@ -18,7 +18,7 @@ public class TitleListByPurchaseNoImageAction
 {
 	public int imageCount;
 
-	public ArrayList<Title2> titleCollection;
+	public ArrayList<Title3> titleCollection;
 
 	public int size;
 
