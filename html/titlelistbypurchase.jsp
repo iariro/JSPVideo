@@ -64,7 +64,7 @@
 				</td>
 				<td><s:property value="media" /></td>
 				<td><a href="imagelist.action?titleid=<s:property value="id" />">
-					<s:if test="%{dmmUrl!=null}">
+					<s:if test="%{dmmUrl!=null && dmmUrl.length()>0}">
 					<img src="<s:property value="dmmImageUrlPs" />" width="78" height="100">
 					</s:if>
 					<s:else>

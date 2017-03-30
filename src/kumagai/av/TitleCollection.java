@@ -255,7 +255,7 @@ public class TitleCollection
 		}
 		else
 		{
-			String sql = String.format("select title.id,title,shorttitle,type,filename,dmmurl,releasedate, w1.rentaldate, w1.buydate,title.memo as titlememo, w1.memo as watchmemo from title join watch w1 on w1.titleid=title.id join image on title.id=image.titleid where title.id in (select titleid from image group by titleid having count(*)=?) and (w1.sequence=(select MAX(w2.sequence) from watch w2 where w2.titleid=w1.titleid) or w1.sequence is null) and buydate<>'' and w1.memo<>'売却' and image.position=1 order by buydate");
+			String sql = String.format("select title.id,title,shorttitle,type,filename,dmmurl,releasedate, w1.rentaldate, w1.buydate,title.memo as titlememo, w1.memo as watchmemo from title join watch w1 on w1.titleid=title.id join image on title.id=image.titleid where title.id in (select titleid from image group by titleid having count(*)=?) and (w1.sequence=(select MAX(w2.sequence) from watch w2 where w2.titleid=w1.titleid) or w1.sequence is null) and buydate<>'' and w1.memo<>'売却' and image.position=(select min(position) from image as img where img.titleid=image.titleid) order by buydate");
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, imageCount);
 		}
