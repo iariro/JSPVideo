@@ -65,6 +65,8 @@
 		<s:form action="uploadimage" method="post" enctype="multipart/form-data" theme="simple">
 			ファイルパス：
 			<input type="file" name="uploadfile" multiple="multiple" size="75" />
+			余白：
+			<s:select name="uploadImageMargin" list="#{ '160,0':'160,0', '0,0':'0,0' }" />
 			<input type="hidden" name="titleId" value="<s:property value='titleId' />">
 			<input type="hidden" name="dmmUrlCid" value="<s:property value='dmmUrlCid' />">
 			<input type="submit" value="アップロード" />

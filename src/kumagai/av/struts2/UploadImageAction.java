@@ -38,36 +38,41 @@ public class UploadImageAction
 		{
 			File sourceFile = new File(args[0]);
 			File destinationFile = new File(args[1]);
-			toJpegAndResize(sourceFile, destinationFile);
+			toJpegAndResize(sourceFile, destinationFile, 0, 0);
 		}
 	}
 
 	/**
 	 * PNGからjPEGへの変換とリサイズ。
-	 * @param sourceImage
-	 * @param width リサイズする幅
-	 * @param height リサイズする高さ
+	 * @param sourceFile 元ファイル
+	 * @param destinationFile 出力ファイル
+	 * @param marginX 左右の余白
+	 * @param marginY 上下の余白
 	 */
-	static void toJpegAndResize(File sourceFile, File destinationFile)
+	static void toJpegAndResize(File sourceFile, File destinationFile, int marginX, int marginY)
 		throws IOException
 	{
 		BufferedImage sourceImage = ImageIO.read(sourceFile);
 		int width = sourceImage.getWidth();
 		int height = sourceImage.getHeight();
+		int width2 = width - marginX * 2;
+		int height2 = height - marginY * 2;
 
-		while ((width > maxWidth) || (height > maxHeight))
+		while ((width2 > maxWidth) || (height2 > maxHeight))
 		{
 			width /= 2;
 			height /= 2;
+			width2 /= 2;
+			height2 /= 2;
 		}
 
 		BufferedImage resizeImage =
-			new BufferedImage(width-1, height, BufferedImage.TYPE_INT_RGB);
+			new BufferedImage(width2-1, height2, BufferedImage.TYPE_INT_RGB);
 		java.awt.Image resizeImage2 =
 			sourceImage.getScaledInstance
 				(width, height, java.awt.Image.SCALE_AREA_AVERAGING);
 		resizeImage.getGraphics().drawImage
-			(resizeImage2, 0, 0, width, height, null);
+			(resizeImage2, -marginX, -marginY, width, height, null);
 		ImageIO.write(resizeImage, "jpg", destinationFile);
 	}
 
@@ -99,6 +104,7 @@ public class UploadImageAction
 	public String dmmUrlCid;
 	public String destinationFileName;
 	public ArrayList<String> uploadedFiles = new ArrayList<String>();
+	public String uploadImageMargin;
 	public String exception;
 
 	/**
@@ -140,6 +146,25 @@ public class UploadImageAction
 
 				int imageId = imageFiles.size() + 1;
 
+				// 余白幅セット
+				int uploadImageMarginX = 0;
+				int uploadImageMarginY = 0;
+				
+				if (uploadImageMargin != null)
+				{
+					// 指定あり
+					
+					String [] uploadImageMargin2 = uploadImageMargin.split(",");
+					
+					if (uploadImageMargin2.length == 2)
+					{
+						// 値は２つ
+
+						uploadImageMarginX = Integer.valueOf(uploadImageMargin2[0]);
+						uploadImageMarginY = Integer.valueOf(uploadImageMargin2[1]);
+					}
+				}
+				
 				for (int i=0 ; i<uploadfile.length ; i++)
 				{
 					destinationFileName =
@@ -148,7 +173,11 @@ public class UploadImageAction
 					File destinationFile = new File(subFolder, destinationFileName);
 
 					// リサイズ
-					toJpegAndResize(uploadfile[i], destinationFile);
+					toJpegAndResize(
+						uploadfile[i],
+						destinationFile,
+						uploadImageMarginX,
+						uploadImageMarginY);
 
 					destinationFileName =
 						new File(
