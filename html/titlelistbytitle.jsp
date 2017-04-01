@@ -50,7 +50,14 @@
 				<a href="http://www.arzon.jp/itemlist.html?t=&m=all&s=&q=<s:property value="title" />">arzon</a>
 				</td>
 				<td><s:property value="media" /></td>
-				<td><a href="imagelist.action?titleid=<s:property value="id" />"><img src="/kumagai/image?folder=AVImageFolder&filename=<s:property value="fileName" />" width="80" height="59"></a></td>
+				<td><a href="imagelist.action?titleid=<s:property value="id" />">
+					<s:if test="%{dmmUrl!=null && dmmUrl.length()>0}">
+					<img src="<s:property value="dmmImageUrlPs" />" width="78" height="100">
+					</s:if>
+					<s:else>
+					<img src="/kumagai/image?folder=AVImageFolder&filename=<s:property value="fileName" />" width="80" height="59">
+					</s:else>
+				</a></td>
 				<td><s:property value="releaseDateString" /></td>
 
 				<td>
