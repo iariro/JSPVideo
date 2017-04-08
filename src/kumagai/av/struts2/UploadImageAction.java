@@ -64,6 +64,8 @@ public class UploadImageAction
 			height /= 2;
 			width2 /= 2;
 			height2 /= 2;
+			marginX /= 2;
+			marginY /= 2;
 		}
 
 		BufferedImage resizeImage =
@@ -144,18 +146,27 @@ public class UploadImageAction
 					new File(subFolder.getPath()).mkdir();
 				}
 
-				int imageId = imageFiles.size() + 1;
+				int lastImageId = 0;
+				for (Image image : imageFiles)
+				{
+					if (lastImageId < Integer.valueOf(image.position))
+					{
+						lastImageId = Integer.valueOf(image.position);
+					}
+				}
+
+				int imageId = lastImageId + 1;
 
 				// 余白幅セット
 				int uploadImageMarginX = 0;
 				int uploadImageMarginY = 0;
-				
+
 				if (uploadImageMargin != null)
 				{
 					// 指定あり
-					
+
 					String [] uploadImageMargin2 = uploadImageMargin.split(",");
-					
+
 					if (uploadImageMargin2.length == 2)
 					{
 						// 値は２つ
@@ -164,7 +175,7 @@ public class UploadImageAction
 						uploadImageMarginY = Integer.valueOf(uploadImageMargin2[1]);
 					}
 				}
-				
+
 				for (int i=0 ; i<uploadfile.length ; i++)
 				{
 					destinationFileName =
