@@ -43,7 +43,7 @@
 				<s:form action="updateimage1" theme="simple">
 					<input type="hidden" name="id" value="<s:property value='id' />">
 					<input type="hidden" name="comment" value="<s:property value='comment' />">
-					<input type="submit" value="変更">
+					<input type="submit" value="コメント編集">
 				</s:form>
 				</td>
 
