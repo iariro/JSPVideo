@@ -9,7 +9,7 @@ import kumagai.av.*;
 
 public class AddImagesTest
 {
-	static private final String filePath = "C:/Users/kumagai/Pictures/AV";
+	static public final String filePath = "C:/Users/kumagai/Pictures/AV";
 
 	public static void main(String[] args)
 		throws SQLException
