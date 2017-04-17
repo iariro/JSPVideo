@@ -1,7 +1,9 @@
 package kumagai.av;
 
+import java.io.File;
 import java.sql.*;
 import java.util.*;
+import ktool.datetime.*;
 
 /**
  * 画像情報コレクション。
@@ -246,6 +248,46 @@ public class ImageCollection
 		statement.close();
 
 		return images;
+	}
+
+	/**
+	 * 画像ファイルの更新日時から最新の画像ファイルを取得
+	 * @param filePath 画像フォルダ
+	 * @return 画像リスト
+	 */
+	static public ArrayList<FileAndDatetime> getNewImageFilst(String filePath)
+	{
+		ArrayList<String> files = new RecursiveFilePathArray(filePath);
+
+		ArrayList<FileAndDatetime> fileAndDatetimes = new ArrayList<FileAndDatetime>();
+		for (String file : files)
+		{
+			if (file.endsWith("jpg") || file.endsWith("jpeg"))
+			{
+				// JPEGファイル
+
+				long updateDate = new File(filePath, file).lastModified();
+				fileAndDatetimes.add(new FileAndDatetime(file, new DateTime(updateDate)));
+			}
+		}
+
+		Collections.sort(
+			fileAndDatetimes,
+			new Comparator<FileAndDatetime>()
+			{
+				public int compare(FileAndDatetime item1, FileAndDatetime item2)
+				{
+					return - item1.updatedate.compareTo(item2.updatedate);
+				}
+			});
+
+		ArrayList<FileAndDatetime> fileAndDatetimes2 = new ArrayList<FileAndDatetime>();
+		for (int i=0 ; i<fileAndDatetimes.size() ; i++)
+		{
+			fileAndDatetimes2.add(fileAndDatetimes.get(i));
+		}
+
+		return fileAndDatetimes2;
 	}
 
 	/**
