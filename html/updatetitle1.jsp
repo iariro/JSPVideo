@@ -66,7 +66,7 @@
 			ファイルパス：
 			<input type="file" name="uploadfile" multiple="multiple" size="75" />
 			余白：
-			<s:select name="uploadImageMargin" list="#{ '0,0':'0,0', '8,0':'8,0', '171,0':'171,0' }" />
+			<s:select name="uploadImageMargin" list="#{ '0,0':'0,0', '8,0':'8,0', '171,0':'171,0', '179,98':'179,98' }" />
 			<input type="hidden" name="titleId" value="<s:property value='titleId' />">
 			<input type="hidden" name="dmmUrlCid" value="<s:property value='dmmUrlCid' />">
 			<input type="submit" value="アップロード" />
