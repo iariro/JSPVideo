@@ -43,6 +43,10 @@
 				<s:submit value="全リスト表示 タイトル順" />
 			</s:form>
 
+			<s:form action="newimagelist" theme="simple">
+				<s:submit value="登録画像一覧" />
+			</s:form>
+
 		</td>
 		<td>
 
