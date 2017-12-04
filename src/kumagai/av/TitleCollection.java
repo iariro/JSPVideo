@@ -1,8 +1,16 @@
 package kumagai.av;
 
-import java.sql.*;
-import java.text.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import ktool.datetime.DateTime;
 
 /**
  * タイトル情報のコレクション。
@@ -370,5 +378,75 @@ public class TitleCollection
 
 		results.close();
 		statement.close();
+	}
+
+	/**
+	 * 購入した作品の年代散布図データ取得
+	 * @return 購入した作品の年代散布図データ
+	 */
+	public String getPurchaseGenerationScatterData()
+		throws ParseException
+	{
+		int count = 0;
+		StringBuffer buffer = new StringBuffer();
+		for (Title3 title : this)
+		{
+			if (title.buyDate != null && title.buyDateIsSure())
+			{
+				// 購入日あり
+
+				if (count > 0)
+				{
+					// ２個目以降
+
+					buffer.append(",");
+				}
+
+				buffer.append(
+					String.format(
+						"[%d,%d]",
+						DateTime.parseDateString(title.buyDate).getCalendar().getTimeInMillis(),
+						new DateTime(title.releaseDate).getCalendar().getTimeInMillis()));
+
+				count++;
+			}
+		}
+
+		return buffer.toString();
+	}
+
+	/**
+	 * レンタルした作品の年代散布図データ取得
+	 * @return レンタルした作品の年代散布図データ
+	 */
+	public String getRentalGenerationScatterData()
+		throws ParseException
+	{
+		int count = 0;
+		StringBuffer buffer = new StringBuffer();
+		for (Title3 title : this)
+		{
+			if (title.rentalDate != null)
+			{
+				// レンタル日あり
+
+				if (count > 0)
+				{
+					// ２個目以降
+
+					buffer.append(",");
+				}
+
+				buffer.append(
+					String.format(
+						"[%d,%d]",
+						DateTime.parseDateString(title.rentalDate).getCalendar().getTimeInMillis(),
+						new DateTime(title.releaseDate).getCalendar().getTimeInMillis()));
+
+				count++;
+			}
+		}
+
+		return buffer.toString();
 	}
 }

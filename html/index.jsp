@@ -65,7 +65,11 @@
 			</s:form>
 
 			<s:form action="titlelistbywatch" theme="simple">
-				<s:submit value="注目作品表示 " />
+				<s:submit value="注目作品表示" />
+			</s:form>
+
+			<s:form action="generationscatter" theme="simple">
+				<s:submit value="視聴作品年代散布図表示" />
 			</s:form>
 
 			<s:form action="costumelist" theme="simple">
