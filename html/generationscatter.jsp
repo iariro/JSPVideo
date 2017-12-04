@@ -20,14 +20,14 @@
 			Highcharts.setOptions({ global: { useUTC: false } });
 			options =
 			{
-				chart: {'type': 'scatter', renderTo: 'chart', zoomType:'xy'},
-				title: {text: '作品年代散布図'},
+				chart: {'type': 'scatter', renderTo: 'chart', zoomType:'xy', plotBackgroundColor: 'lightgray'},
+				title: {text: '視聴作品年代散布図'},
 				xAxis: {title: '視聴時期', type: 'datetime'},
 				yAxis: {title: '作品年代', type: 'datetime'},
 				series:
 					[
-					{name:'購入', data:[ <s:property value="purchaseGenerationScatterData" /> ]},
-					{name:'レンタル', data:[ <s:property value="rentalGenerationScatterData" /> ]}
+					{name:'レンタル', data:[ <s:property value="rentalGenerationScatterData" /> ]},
+					{name:'購入', data:[ <s:property value="purchaseGenerationScatterData" /> ]}
 					]
 			};
 			chart = new Highcharts.Chart(options);

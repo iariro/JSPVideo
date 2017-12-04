@@ -385,7 +385,6 @@ public class TitleCollection
 	 * @return 購入した作品の年代散布図データ
 	 */
 	public String getPurchaseGenerationScatterData()
-		throws ParseException
 	{
 		int count = 0;
 		StringBuffer buffer = new StringBuffer();
@@ -395,20 +394,28 @@ public class TitleCollection
 			{
 				// 購入日あり
 
-				if (count > 0)
+				try
 				{
-					// ２個目以降
+					String point =
+						String.format(
+							"[%d,%d]",
+							DateTime.parseDateString(title.buyDate).getCalendar().getTimeInMillis(),
+							new DateTime(title.releaseDate).getCalendar().getTimeInMillis());
 
-					buffer.append(",");
+					if (count > 0)
+					{
+						// ２個目以降
+
+						buffer.append(",");
+					}
+
+					buffer.append(point);
+
+					count++;
 				}
-
-				buffer.append(
-					String.format(
-						"[%d,%d]",
-						DateTime.parseDateString(title.buyDate).getCalendar().getTimeInMillis(),
-						new DateTime(title.releaseDate).getCalendar().getTimeInMillis()));
-
-				count++;
+				catch (ParseException exception)
+				{
+				}
 			}
 		}
 
@@ -420,7 +427,6 @@ public class TitleCollection
 	 * @return レンタルした作品の年代散布図データ
 	 */
 	public String getRentalGenerationScatterData()
-		throws ParseException
 	{
 		int count = 0;
 		StringBuffer buffer = new StringBuffer();
@@ -430,20 +436,27 @@ public class TitleCollection
 			{
 				// レンタル日あり
 
-				if (count > 0)
+				try
 				{
-					// ２個目以降
+					String point =
+						String.format(
+							"[%d,%d]",
+							DateTime.parseDateString(title.rentalDate).getCalendar().getTimeInMillis(),
+							new DateTime(title.releaseDate).getCalendar().getTimeInMillis());
+					if (count > 0)
+					{
+						// ２個目以降
 
-					buffer.append(",");
+						buffer.append(",");
+					}
+
+					buffer.append(point);
+
+					count++;
 				}
-
-				buffer.append(
-					String.format(
-						"[%d,%d]",
-						DateTime.parseDateString(title.rentalDate).getCalendar().getTimeInMillis(),
-						new DateTime(title.releaseDate).getCalendar().getTimeInMillis()));
-
-				count++;
+				catch (ParseException exception)
+				{
+				}
 			}
 		}
 

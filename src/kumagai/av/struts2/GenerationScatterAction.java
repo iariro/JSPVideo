@@ -49,7 +49,7 @@ public class GenerationScatterAction
 			DriverManager.registerDriver(new SQLServerDriver());
 
 			Connection connection = DriverManager.getConnection(url);
-			TitleCollection titleCollection = new TitleCollection(connection, true, false, "buydate", null, null);
+			TitleCollection titleCollection = new TitleCollection(connection, false, false, "buydate", null, null);
 			connection.close();
 
 			purchaseGenerationScatterData = titleCollection.getPurchaseGenerationScatterData();
