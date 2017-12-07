@@ -382,17 +382,19 @@ public class TitleCollection
 
 	/**
 	 * 購入した作品の年代散布図データ取得
+	 * @param media メディア
 	 * @return 購入した作品の年代散布図データ
 	 */
-	public String getPurchaseGenerationScatterData()
+	public String getPurchaseGenerationScatterData(String media)
 	{
 		int count = 0;
 		StringBuffer buffer = new StringBuffer();
 		for (Title3 title : this)
 		{
-			if (title.buyDate != null && title.buyDateIsSure())
+			if (title.buyDate != null && title.buyDateIsSure() &&
+				(media != null && title.media.equals(media)))
 			{
-				// 購入日あり
+				// 購入日あり、指定のメディアである
 
 				try
 				{
@@ -424,17 +426,19 @@ public class TitleCollection
 
 	/**
 	 * レンタルした作品の年代散布図データ取得
+	 * @param media メディア
 	 * @return レンタルした作品の年代散布図データ
 	 */
-	public String getRentalGenerationScatterData()
+	public String getRentalGenerationScatterData(String media)
 	{
 		int count = 0;
 		StringBuffer buffer = new StringBuffer();
 		for (Title3 title : this)
 		{
-			if (title.rentalDate != null)
+			if (title.rentalDate != null &&
+				(media != null && title.media.equals(media)))
 			{
-				// レンタル日あり
+				// 購入日あり、指定のメディアである
 
 				try
 				{

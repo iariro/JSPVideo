@@ -26,8 +26,12 @@
 				yAxis: {title: '作品年代', type: 'datetime'},
 				series:
 					[
-					{name:'レンタル', data:[ <s:property value="rentalGenerationScatterData" /> ]},
-					{name:'購入', data:[ <s:property value="purchaseGenerationScatterData" /> ]}
+					{name:'VHSレンタル', data:[ <s:property value="rentalVhsGenerationScatterData" /> ]},
+					{name:'VHS購入', data:[ <s:property value="purchaseVhsGenerationScatterData" /> ]},
+					{name:'DVDレンタル', data:[ <s:property value="rentalDvdGenerationScatterData" /> ]},
+					{name:'DVD購入', data:[ <s:property value="purchaseDvdGenerationScatterData" /> ]},
+					{name:'ネットレンタル', data:[ <s:property value="rentalDLGenerationScatterData" /> ]},
+					{name:'ネット購入', data:[ <s:property value="purchaseDLGenerationScatterData" /> ]}
 					]
 			};
 			chart = new Highcharts.Chart(options);

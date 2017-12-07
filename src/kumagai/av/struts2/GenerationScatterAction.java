@@ -27,8 +27,12 @@ import kumagai.av.TitleCollection;
 })
 public class GenerationScatterAction
 {
-	public String purchaseGenerationScatterData;
-	public String rentalGenerationScatterData;
+	public String purchaseVhsGenerationScatterData;
+	public String rentalVhsGenerationScatterData;
+	public String purchaseDvdGenerationScatterData;
+	public String rentalDvdGenerationScatterData;
+	public String purchaseDLGenerationScatterData;
+	public String rentalDLGenerationScatterData;
 
 	/**
 	 * 視聴した作品の年代散布図表示アクション。
@@ -52,8 +56,12 @@ public class GenerationScatterAction
 			TitleCollection titleCollection = new TitleCollection(connection, false, false, "buydate", null, null);
 			connection.close();
 
-			purchaseGenerationScatterData = titleCollection.getPurchaseGenerationScatterData();
-			rentalGenerationScatterData = titleCollection.getRentalGenerationScatterData();
+			purchaseVhsGenerationScatterData = titleCollection.getPurchaseGenerationScatterData("VHS");
+			rentalVhsGenerationScatterData = titleCollection.getRentalGenerationScatterData("VHS");
+			purchaseDvdGenerationScatterData = titleCollection.getPurchaseGenerationScatterData("DVD");
+			rentalDvdGenerationScatterData = titleCollection.getRentalGenerationScatterData("DVD");
+			purchaseDLGenerationScatterData = titleCollection.getPurchaseGenerationScatterData("DL");
+			rentalDLGenerationScatterData = titleCollection.getRentalGenerationScatterData("DL");
 
 			return "success";
 		}
