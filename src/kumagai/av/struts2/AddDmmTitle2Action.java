@@ -21,7 +21,7 @@ import kumagai.av.DmmTitleInfo;
 	@Result(name="success", location="/av/addtitle1.jsp"),
 	@Result(name="error", location="/av/error.jsp")
 })
-public class AddDmmTitle2
+public class AddDmmTitle2Action
 {
 	public String dmmUrl;
 	public String title;
