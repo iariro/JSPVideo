@@ -87,7 +87,8 @@
 		</td>
 		<td>
 
-			<a href="addtitle1.jsp">タイトル入力</a>
+			<a href="adddmmtitle1.jsp">DMMタイトル入力</a><br>
+			<a href="addtitle1.jsp">タイトル手入力</a><br>
 
 			<s:form action="addbulkimages" theme="simple">
 				<s:submit value="画像一括登録" />
