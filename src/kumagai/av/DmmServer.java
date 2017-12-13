@@ -1,8 +1,11 @@
 package kumagai.av;
 
-import java.io.*;
-import java.net.URL;
-import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,98 +14,99 @@ import java.util.regex.Pattern;
  */
 public class DmmServer
 {
-	static private final String empty = "";
-	static private final Pattern patternTitle = Pattern.compile("<h1 id=\"title\" class=\"item fn\">([^<]*).*");
+	static private final Pattern patternTitle = Pattern.compile(".*<h1 id=\"title\" [^>]*>([^<]*).*");
+	static private final Pattern patternDate = Pattern.compile(".*([0-9]{4}/[0-9]{2}/[0-9]{2}).*");
 
 	static public void main(String [] args)
 		throws IOException
 	{
 		InputStream in = new FileInputStream(args[0]);
-		BufferedReader br = new BufferedReader(new InputStreamReader(in, "utf-8"));
-		String line;
-		while ((line = br.readLine()) != null)
-		{
-			Matcher matcher = patternTitle.matcher(line);
-			if (matcher.matches())
-			{
-				System.out.println(matcher.group(1));
-			}
-		}
-		in.close();
+		DmmTitleInfo titleInfo = getTitleInfo(in);
+		System.out.println(titleInfo);
 	}
 
 	/**
-	 * pastorchestra.htmの内容からURLと楽団名を取得
-	 * @param lines HTML行データ
-	 * @return URLと楽団名リスト
+	 * 作品情報読み取り内部状態
 	 */
-	/*static public ArrayList<PastConcertInfo> getUrls(String[] lines)
+	enum DmmReadStatus
 	{
-		ArrayList<PastConcertInfo> urls = new ArrayList<PastConcertInfo>();
-		String url = null;
-		String orchestra = null;
-		for (String line : lines)
+		none,
+		webReleaseDate,
+		mediaReleaseDate
+	}
+
+	/**
+	 * HTMLから作品情報を読み取る
+	 * @param html 作品ページHTML
+	 * @return 作品情報
+	 */
+	static public DmmTitleInfo getTitleInfo(InputStream html)
+		throws UnsupportedEncodingException, IOException
+	{
+		BufferedReader reader = new BufferedReader(new InputStreamReader(html, "utf-8"));
+		DmmTitleInfo titleInfo = new DmmTitleInfo();
+		DmmReadStatus readStatus = DmmReadStatus.none;
+		String line;
+		while ((line = reader.readLine()) != null)
 		{
-			Matcher matcher = pattern.matcher(line);
-			if (matcher.matches())
+			if (readStatus == DmmReadStatus.none)
 			{
-				// <a>行
+				// 普通の場所
 
-				url = matcher.group(1);
-			}
-			else
-			{
-				// それ以外
-
-				line = line.replaceAll("<.+?>", empty);
-				if (url != null)
+				if (line.indexOf("配信開始日：") >= 0)
 				{
-					// URL確定
+					// 配信開始日が次に続く
 
-					line = line.trim();
-					if (line.length() > 0)
+					readStatus = DmmReadStatus.webReleaseDate;
+				}
+				else if (line.indexOf("商品発売日：") >= 0)
+				{
+					// 商品発売日が次に続く
+
+					readStatus = DmmReadStatus.mediaReleaseDate;
+				}
+				else
+				{
+					// 普通の場所
+
+					Matcher matcher = patternTitle.matcher(line);
+					if (matcher.matches())
 					{
-						if (orchestra == null)
-						{
-							// 楽団名がまだ→楽団名
+						// タイトルを含む行である
 
-							orchestra = line;
-						}
-						else
-						{
-							// 楽団名あり→日付
-
-							urls.add(new PastConcertInfo(null, orchestra, url, line, null));
-							url = null;
-							orchestra = null;
-						}
+						titleInfo.title = matcher.group(1);
 					}
 				}
 			}
+			else if (readStatus == DmmReadStatus.webReleaseDate)
+			{
+				// 配信開始日
+
+				Matcher matcher = patternDate.matcher(line);
+				if (matcher.matches())
+				{
+					// 日付を検出
+
+					titleInfo.webReleaseDate = matcher.group(1);
+					readStatus = DmmReadStatus.none;
+				}
+			}
+			else if (readStatus == DmmReadStatus.mediaReleaseDate)
+			{
+				// 商品発売日
+
+				Matcher matcher = patternDate.matcher(line);
+				if (matcher.matches())
+				{
+					// 日付を検出
+
+					titleInfo.mediaReleaseDate = matcher.group(1);
+					readStatus = DmmReadStatus.none;
+				}
+			}
 		}
-		return urls;
-	}*/
+		html.close();
 
-	/**
-	 * HTML読み込み。
-	 * @param filename ファイル名
-	 */
-	/*static public String [] getHtmlLines(String filename) throws IOException
-	{
-		URL url = new URL(String.format(urlBase, filename));
-
-		InputStream in = url.openStream();
-		BufferedReader br = new BufferedReader(new InputStreamReader(in, "utf-8"));
-
-		ArrayList<String> lines = new ArrayList<String>();
-		String line;
-		while ((line = br.readLine()) != null)
-		{
-			lines.add(line);
-		}
-
-		in.close();
-
-		return lines.toArray(new String [] {});
-	}*/
+		return titleInfo;
+	}
 }
