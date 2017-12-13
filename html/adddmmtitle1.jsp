@@ -15,7 +15,7 @@
 
 		<div class=hatena-body>
 		<div class=main>
-		<s:form action="addtitle2" theme="simple">
+		<s:form action="adddmmtitle2" theme="simple">
 			URL : <input type="text" name="dmmUrl" size="50">
 			<input type="submit">
 		</s:form>
