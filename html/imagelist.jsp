@@ -29,6 +29,17 @@
 					<s:property value="comment" /><br>
 				</s:if>
 
+				<s:if test="%{costumes.size() > 0}">
+					コスチューム：
+					<table><tr>
+					<s:iterator value="costumes">
+						<td><s:property value='costume' /></td>
+						<td><s:property value='feature' /></td>
+						<td><s:property value='score' /></td>
+					</s:iterator>
+					</tr></table>
+				</s:if>
+
 				<table style='margin:0px; border:0px;'><tr>
 
 				<td style='padding:0px; border:0px;'>
