@@ -1,6 +1,8 @@
 package kumagai.av;
 
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * 画像情報。
@@ -9,10 +11,11 @@ import java.sql.*;
 public class Image
 {
 	public final int id;
-	public final String titleId;
+	public final int titleId;
 	public final String position;
 	public final String fileName;
 	public final String comment;
+	public ArrayList<Costume> costumes = new ArrayList<Costume>();
 
 	/**
 	 * 指定の値をメンバーに割り当て。
@@ -22,7 +25,7 @@ public class Image
 	 * @param fileName ファイル名
 	 * @param comment コメント
 	 */
-	public Image(int id, String titleId, String position, String fileName,
+	public Image(int id, int titleId, String position, String fileName,
 		String comment)
 	{
 		this.id = id;
@@ -40,7 +43,7 @@ public class Image
 		throws SQLException
 	{
 		id = results.getInt("id");
-		titleId = results.getString("titleid");
+		titleId = results.getInt("titleid");
 		position = results.getString("position");
 		fileName = results.getString("filename");
 		comment = results.getString("comment");

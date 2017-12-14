@@ -1,7 +1,15 @@
 package kumagai.av;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * コスチューム情報コレクション。
@@ -16,8 +24,7 @@ public class CostumeCollection
 			DriverManager.getConnection(
 				"jdbc:sqlserver://localhost:2144;DatabaseName=AV;User=sa;Password=p@ssw0rd;");
 
-		CostumeCollection costumeCollection =
-			new CostumeCollection(connection);
+		CostumeCollection costumeCollection = new CostumeCollection(connection, null);
 
 		connection.close();
 
@@ -99,13 +106,29 @@ public class CostumeCollection
 	/**
 	 * 全コスチューム情報を取得。
 	 * @param connection DB接続オブジェクト
+	 * @param titleId 作品ID
 	 */
-	public CostumeCollection(Connection connection)
+	public CostumeCollection(Connection connection, Integer titleId)
 		throws SQLException
 	{
-		String sql = "select costume.id as costumeid, title, filename, costume, feature, score from costume join image on image.id=costume.imageid join title on title.id=costume.titleid order by score desc, costume, title.id";
+		String sql = "select costume.id as costumeid, image.id as imageid, filename, costume, feature, score from costume join image on image.id=costume.imageid join title on title.id=costume.titleid";
+		if (titleId != null)
+		{
+			// タイトルID指定あり
+
+			sql += " where title.id=?";
+		}
+		sql += " order by score desc, costume, title.id";
 
 		PreparedStatement statement = connection.prepareStatement(sql);
+
+		if (titleId != null)
+		{
+			// タイトルID指定あり
+
+			statement.setInt(1, titleId);
+		}
+
 		ResultSet results = statement.executeQuery();
 
 		while (results.next())

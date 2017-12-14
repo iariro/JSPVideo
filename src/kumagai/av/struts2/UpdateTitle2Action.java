@@ -1,11 +1,19 @@
 package kumagai.av.struts2;
 
-import java.sql.*;
-import javax.servlet.*;
-import com.microsoft.sqlserver.jdbc.*;
-import org.apache.struts2.*;
-import org.apache.struts2.convention.annotation.*;
-import kumagai.av.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+import javax.servlet.ServletContext;
+
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.Result;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import kumagai.av.ImageCollection;
+import kumagai.av.TitleCollection;
 
 /**
  * タイトル情報変更アクション。
@@ -76,7 +84,7 @@ public class UpdateTitle2Action
 						// 画像は既存。
 
 						ImageCollection.update
-							(connection, titleId, i + 1, imageFiles[i]);
+							(connection, Integer.valueOf(titleId), i + 1, imageFiles[i]);
 					}
 					else
 					{

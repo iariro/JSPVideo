@@ -1,9 +1,16 @@
 package kumagai.av;
 
 import java.io.File;
-import java.sql.*;
-import java.util.*;
-import ktool.datetime.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+import ktool.datetime.DateTime;
 
 /**
  * 画像情報コレクション。
@@ -42,7 +49,7 @@ public class ImageCollection
 	 * @param fileName 画像ファイル名
 	 */
 	static public void update
-		(Connection connection, String titleId, int position, String fileName)
+		(Connection connection, int titleId, int position, String fileName)
 		throws SQLException
 	{
 		PreparedStatement statement =
@@ -50,7 +57,7 @@ public class ImageCollection
 				"update image set filename=? where titleid=? and position=?");
 
 		statement.setString(1, fileName);
-		statement.setString(2, titleId);
+		statement.setInt(2, titleId);
 		statement.setInt(3, position);
 
 		statement.executeUpdate();
@@ -188,6 +195,22 @@ public class ImageCollection
 
 		results.close();
 		statement.close();
+
+		// コスチューム情報
+		CostumeCollection costumeCollection =
+			new CostumeCollection(connection, Integer.valueOf(titleid));
+		for (Image image : images)
+		{
+			for (Costume costume : costumeCollection)
+			{
+				if (costume.imageId == image.id)
+				{
+					// 対象の画像に対するコスチューム情報である
+
+					image.costumes.add(costume);
+				}
+			}
+		}
 
 		return images;
 	}

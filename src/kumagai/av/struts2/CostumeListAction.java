@@ -1,12 +1,21 @@
 package kumagai.av.struts2;
 
-import java.sql.*;
-import java.util.*;
-import javax.servlet.*;
-import com.microsoft.sqlserver.jdbc.*;
-import org.apache.struts2.*;
-import org.apache.struts2.convention.annotation.*;
-import kumagai.av.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.util.ArrayList;
+
+import javax.servlet.ServletContext;
+
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.Result;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import kumagai.av.CostumeCollection;
+import kumagai.av.CostumeGroup;
+import kumagai.av.FeatureAndScore;
 
 /**
  * コスチューム情報一覧表示アクション。
@@ -36,7 +45,7 @@ public class CostumeListAction
 			DriverManager.getConnection
 				(context.getInitParameter("AVSqlserverUrl"));
 
-		CostumeCollection costumes = new CostumeCollection(connection);
+		CostumeCollection costumes = new CostumeCollection(connection, null);
 
 		connection.close();
 

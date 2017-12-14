@@ -1,6 +1,7 @@
 package kumagai.av;
 
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * コスチューム情報。
@@ -9,7 +10,7 @@ import java.sql.*;
 public class Costume
 {
 	public final int costumeid;
-	public final String title;
+	public final int imageId;
 	public final String filename;
 	public final String costume;
 	public final String feature;
@@ -23,7 +24,7 @@ public class Costume
 		throws SQLException
 	{
 		this.costumeid = results.getInt("costumeid");
-		this.title = results.getString("title").trim();
+		this.imageId = results.getInt("imageid");
 		this.filename = results.getString("filename").trim();
 		this.costume = results.getString("costume").trim();
 		this.feature = results.getString("feature").trim();
@@ -35,6 +36,6 @@ public class Costume
 	 */
 	public String toString()
 	{
-		return String.format("%s %s %s %d", title, costume, feature, score);
+		return String.format("%d %s %s %d", imageId, costume, feature, score);
 	}
 }
