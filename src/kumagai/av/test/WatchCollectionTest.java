@@ -1,9 +1,13 @@
 package kumagai.av.test;
 
-import java.sql.*;
-import java.util.*;
-import kumagai.av.*;
-import junit.framework.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import junit.framework.TestCase;
+import kumagai.av.WatchCollection;
+import kumagai.av.WatchInformation;
 
 public class WatchCollectionTest
 	extends TestCase
@@ -15,7 +19,7 @@ public class WatchCollectionTest
 			DriverManager.getConnection(
 				"jdbc:sqlserver://localhost:2144;DatabaseName=AV;User=sa;Password=p@ssw0rd;");
 
-		WatchCollection.insertAsUpdate(connection, "183", "2000/1/1", "2000/1/1", null, "test");
+		WatchCollection.insertAsUpdate(connection, 183, "2000/1/1", "2000/1/1", null, "test");
 
 		connection.close();
 	}

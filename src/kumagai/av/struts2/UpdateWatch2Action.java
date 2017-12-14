@@ -1,11 +1,18 @@
 package kumagai.av.struts2;
 
-import java.sql.*;
-import javax.servlet.*;
-import com.microsoft.sqlserver.jdbc.*;
-import org.apache.struts2.*;
-import org.apache.struts2.convention.annotation.*;
-import kumagai.av.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+import javax.servlet.ServletContext;
+
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.Result;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import kumagai.av.WatchCollection;
 
 /**
  * 視聴情報更新アクション。
@@ -45,14 +52,14 @@ public class UpdateWatch2Action
 			// 存在する。変更。
 
 			WatchCollection.insertAsUpdate
-				(connection, titleId, rentalDate, buyDate, watch, memo);
+				(connection, Integer.valueOf(titleId), rentalDate, buyDate, watch, memo);
 		}
 		else
 		{
 			// 存在しない。新規。
 
 			WatchCollection.insertAsNew
-				(connection, titleId, rentalDate, buyDate, watch, memo);
+				(connection, Integer.valueOf(titleId), rentalDate, buyDate, watch, memo);
 		}
 
 		connection.close();

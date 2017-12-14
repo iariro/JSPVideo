@@ -1,7 +1,10 @@
 package kumagai.av;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * 視聴情報のコレクション。
@@ -131,7 +134,7 @@ public class WatchCollection
 	 * @param watch 注目フラグ
 	 * @param memo メモ
 	 */
-	static public void insertAsNew(Connection connection, String titleid,
+	static public void insertAsNew(Connection connection, int titleid,
 		String rentaldate, String buydate, String watch, String memo)
 		throws SQLException
 	{
@@ -152,7 +155,7 @@ public class WatchCollection
 			watch = "0";
 		}
 
-		statement.setString(1, titleid);
+		statement.setInt(1, titleid);
 		statement.setString(2, rentaldate);
 		statement.setString(3, buydate);
 		statement.setString(4, watch);
@@ -171,7 +174,7 @@ public class WatchCollection
 	 * @param watch 注目フラグ
 	 * @param memo メモ
 	 */
-	static public void insertAsUpdate(Connection connection, String titleid,
+	static public void insertAsUpdate(Connection connection, int titleid,
 		String rentaldate, String buydate, String watch, String memo)
 		throws SQLException
 	{
@@ -192,12 +195,12 @@ public class WatchCollection
 			watch = "0";
 		}
 
-		statement.setString(1, titleid);
+		statement.setInt(1, titleid);
 		statement.setString(2, rentaldate);
 		statement.setString(3, buydate);
 		statement.setString(4, watch);
 		statement.setString(5, memo);
-		statement.setString(6, titleid);
+		statement.setInt(6, titleid);
 		statement.executeUpdate();
 
 		statement.close();
