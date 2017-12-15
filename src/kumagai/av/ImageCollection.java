@@ -433,7 +433,7 @@ public class ImageCollection
 	 * @param uploadImageMargin 画像切り出し座標X,Y
 	 * @return アップロードした画像の配列
 	 */
-	static public ArrayList<String> uploadFiles(Connection connection, File subFolder, File [] uploadfiles, String dmmUrlCid, int titleId, int imageId, String uploadImageMargin)
+	static public ArrayList<String> uploadFiles(Connection connection, String folderPath, File [] uploadfiles, String dmmUrlCid, int titleId, int imageId, String uploadImageMargin)
 		throws IOException, SQLException
 	{
 		ArrayList<String> uploadedFiles = new ArrayList<String>();
@@ -457,6 +457,7 @@ public class ImageCollection
 			}
 		}
 	
+		File subFolder = new File(folderPath, dmmUrlCid.substring(0, 1));
 		if (!subFolder.exists())
 		{
 			// 存在しない
@@ -483,11 +484,14 @@ public class ImageCollection
 					dmmUrlCid.substring(0, 1),
 					destinationFileName).getPath();
 	
-			insert(
-				connection,
-				titleId,
-				imageId,
-				destinationFileName);
+			if (connection != null)
+			{
+				insert(
+					connection,
+					titleId,
+					imageId,
+					destinationFileName);
+			}
 	
 			imageId++;
 	
@@ -495,5 +499,52 @@ public class ImageCollection
 		}
 	
 		return uploadedFiles;
+	}
+
+	/**
+	 * 画像のアップロード
+	 * @param folderPath 画像トップフォルダパス
+	 * @param uploadfile アップロードするファイル
+	 * @param fileName ファイル名
+	 * @param uploadImageMargin 画像切り出し座標X,Y
+	 */
+	static public void replaceFile(String folderPath, File uploadfile, String fileName, String uploadImageMargin)
+		throws IOException, SQLException
+	{
+		// 余白幅セット
+		int uploadImageMarginX = 0;
+		int uploadImageMarginY = 0;
+
+		if (uploadImageMargin != null)
+		{
+			// 指定あり
+
+			String [] uploadImageMargin2 = uploadImageMargin.split(",");
+
+			if (uploadImageMargin2.length == 2)
+			{
+				// 値は２つ
+
+				uploadImageMarginX = Integer.valueOf(uploadImageMargin2[0]);
+				uploadImageMarginY = Integer.valueOf(uploadImageMargin2[1]);
+			}
+		}
+
+		File subFolder = new File(folderPath, fileName.substring(0, 1));
+		if (!subFolder.exists())
+		{
+			// 存在しない
+
+			new File(subFolder.getPath()).mkdir();
+		}
+
+		File destinationFile = new File(subFolder, fileName);
+
+		// リサイズ
+		ImageCollection.toJpegAndResize(
+			uploadfile,
+			destinationFile,
+			uploadImageMarginX,
+			uploadImageMarginY);
 	}
 }

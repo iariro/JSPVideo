@@ -63,7 +63,6 @@
 		</s:form>
 
 		<s:form action="uploadimage" method="post" enctype="multipart/form-data" theme="simple">
-			ファイルパス：
 			<input type="file" name="uploadfile" multiple="multiple" size="75" />
 			余白：
 			<s:select name="uploadImageMargin" list="#{ '0,0':'0,0', '8,0':'8,0', '171,0':'171,0', '179,98':'179,98' }" />

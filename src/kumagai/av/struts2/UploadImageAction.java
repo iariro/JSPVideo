@@ -110,8 +110,6 @@ public class UploadImageAction
 					ImageCollection.getFileNamesById
 						(connection, Integer.toString(titleId));
 
-				File subFolder = new File(folderPath, dmmUrlCid.substring(0, 1));
-
 				int lastImageId = 0;
 				for (Image image : imageFiles)
 				{
@@ -125,7 +123,7 @@ public class UploadImageAction
 
 				uploadedFiles =
 					ImageCollection.uploadFiles
-						(connection, subFolder, uploadfile, dmmUrlCid, titleId, imageId, uploadImageMargin);
+						(connection, folderPath, uploadfile, dmmUrlCid, titleId, imageId, uploadImageMargin);
 
 				connection.close();
 

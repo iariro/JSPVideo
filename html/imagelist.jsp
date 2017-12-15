@@ -59,6 +59,14 @@
 				</td>
 
 				<td style='padding:0px; border:0px;'>
+				<s:form action="replaceimage" theme="simple">
+					<input type="hidden" name="imageid" value="<s:property value='id' />">
+					<input type="hidden" name="filename" value="<s:property value='fileName' />">
+					<input type="submit" value="画像更新" />
+				</s:form>
+				</td>
+
+				<td style='padding:0px; border:0px;'>
 				<s:form action="deleteimage" theme="simple">
 					<input type="hidden" name="imageid" value="<s:property value='id' />">
 					<input type="hidden" name="filename" value="<s:property value='fileName' />">
