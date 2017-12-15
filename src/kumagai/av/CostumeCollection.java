@@ -88,17 +88,33 @@ public class CostumeCollection
 	}
 
 	/**
-	 * コスチューム情報削除。
+	 * コスチューム情報削除。コスチュームIDによる。
 	 * @param connection DB接続オブジェクト
 	 * @param costumeid コスチュームID
 	 */
-	static public void delete(Connection connection, int costumeid)
+	static public void deleteByCostumeId(Connection connection, int costumeid)
 		throws SQLException
 	{
 		PreparedStatement statement =
 			connection.prepareStatement("delete costume where id=?");
 
 		statement.setInt(1, costumeid);
+
+		statement.executeUpdate();
+	}
+
+	/**
+	 * コスチューム情報削除。画像IDによる。
+	 * @param connection DB接続オブジェクト
+	 * @param imageid 画像ID
+	 */
+	static public void deleteByImageId(Connection connection, int imageid)
+		throws SQLException
+	{
+		PreparedStatement statement =
+			connection.prepareStatement("delete costume where imageid=?");
+
+		statement.setInt(1, imageid);
 
 		statement.executeUpdate();
 	}

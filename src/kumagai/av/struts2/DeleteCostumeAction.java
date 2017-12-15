@@ -33,7 +33,7 @@ public class DeleteCostumeAction
 			DriverManager.getConnection
 				(context.getInitParameter("AVSqlserverUrl"));
 
-		CostumeCollection.delete(connection, costumeid);
+		CostumeCollection.deleteByCostumeId(connection, costumeid);
 
 		connection.close();
 

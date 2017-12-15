@@ -1,23 +1,38 @@
 package kumagai.av.struts2;
 
-import java.io.*;
-import java.sql.*;
-import javax.servlet.*;
-import com.microsoft.sqlserver.jdbc.*;
-import org.apache.struts2.*;
-import org.apache.struts2.convention.annotation.*;
-import kumagai.av.*;
+import java.io.File;
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+import javax.servlet.ServletContext;
+
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import kumagai.av.CostumeCollection;
+import kumagai.av.ImageCollection;
 
 /**
  * 画像削除アクション。
  * @author kumagai
  */
 @Namespace("/av")
-@Result(name="success", location="/av/deleteimage.jsp")
+@Results
+({
+	@Result(name="success", location="/av/deleteimage.jsp"),
+	@Result(name="error", location="/av/error.jsp")
+})
 public class DeleteImageAction
 {
 	public int imageid;
 	public String filename;
+
+	public String message;
 
 	/**
 	 * 画像削除アクション。
@@ -27,29 +42,45 @@ public class DeleteImageAction
 	public String execute()
 		throws Exception
 	{
-		ServletContext context = ServletActionContext.getServletContext();
-
-		DriverManager.registerDriver(new SQLServerDriver());
-
-		Connection connection =
-			DriverManager.getConnection
-				(context.getInitParameter("AVSqlserverUrl"));
-
-		ImageCollection.delete(connection, imageid);
-
-		connection.close();
-
-		String filePath = context.getInitParameter("AVImageFolder");
-
-		File file = new File(filePath, filename);
-
-		if (file.exists())
+		try
 		{
-			// ファイルは存在する。
+			ServletContext context = ServletActionContext.getServletContext();
 
-			file.delete();
+			String dbUrl = context.getInitParameter("AVSqlserverUrl");
+			String filePath = context.getInitParameter("AVImageFolder");
+			if (dbUrl != null && filePath != null)
+			{
+				// 必要なパラメータはある
+
+				DriverManager.registerDriver(new SQLServerDriver());
+
+				Connection connection = DriverManager.getConnection(dbUrl);
+				ImageCollection.delete(connection, imageid);
+				CostumeCollection.deleteByImageId(connection, imageid);
+				connection.close();
+
+				File file = new File(filePath, filename);
+				if (file.exists())
+				{
+					// ファイルは存在する。
+
+					file.delete();
+				}
+
+				return "success";
+			}
+			else
+			{
+				// 必要なパラメータはない
+
+				message = "AVSqlserverUrl and/or AVImageFolder定義なし";
+			}
+		}
+		catch (Exception exception)
+		{
+			message = exception.getMessage();
 		}
 
-		return "success";
+		return "error";
 	}
 }
