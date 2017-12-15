@@ -1,6 +1,8 @@
 package kumagai.av;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,6 +11,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+
+import javax.imageio.ImageIO;
 
 import ktool.datetime.DateTime;
 
@@ -19,6 +23,9 @@ import ktool.datetime.DateTime;
 public class ImageCollection
 	extends ArrayList<Image>
 {
+	public static final int maxWidth = 700;
+	public static final int maxHeight = 480;
+
 	/**
 	 * 画像情報を追加。
 	 * @param connection DB接続オブジェクト
@@ -377,5 +384,116 @@ public class ImageCollection
 		}
 
 		return invalidImageFiles;
+	}
+
+	/**
+	 * PNGからjPEGへの変換とリサイズ。
+	 * @param sourceFile 元ファイル
+	 * @param destinationFile 出力ファイル
+	 * @param marginX 左右の余白
+	 * @param marginY 上下の余白
+	 */
+	public static void toJpegAndResize(File sourceFile, File destinationFile, int marginX, int marginY)
+		throws IOException
+	{
+		BufferedImage sourceImage = ImageIO.read(sourceFile);
+		int width = sourceImage.getWidth();
+		int height = sourceImage.getHeight();
+		int width2 = width - marginX * 2;
+		int height2 = height - marginY * 2;
+	
+		while ((width2 > maxWidth) || (height2 > maxHeight))
+		{
+			width /= 2;
+			height /= 2;
+			width2 /= 2;
+			height2 /= 2;
+			marginX /= 2;
+			marginY /= 2;
+		}
+	
+		BufferedImage resizeImage =
+			new BufferedImage(width2-1, height2, BufferedImage.TYPE_INT_RGB);
+		java.awt.Image resizeImage2 =
+			sourceImage.getScaledInstance
+				(width, height, java.awt.Image.SCALE_AREA_AVERAGING);
+		resizeImage.getGraphics().drawImage
+			(resizeImage2, -marginX, -marginY, width, height, null);
+		ImageIO.write(resizeImage, "jpg", destinationFile);
+	}
+
+	/**
+	 * 画像のアップロード
+	 * @param connection DB接続オブジェクト
+	 * @param subFolder 画像格納フォルダ
+	 * @param uploadfiles 画像の配列
+	 * @param dmmUrlCid DMM上のタイトルCID
+	 * @param titleId タイトルID
+	 * @param imageId １個目の画像ID
+	 * @param uploadImageMargin 画像切り出し座標X,Y
+	 * @return アップロードした画像の配列
+	 */
+	static public ArrayList<String> uploadFiles(Connection connection, File subFolder, File [] uploadfiles, String dmmUrlCid, int titleId, int imageId, String uploadImageMargin)
+		throws IOException, SQLException
+	{
+		ArrayList<String> uploadedFiles = new ArrayList<String>();
+	
+		// 余白幅セット
+		int uploadImageMarginX = 0;
+		int uploadImageMarginY = 0;
+	
+		if (uploadImageMargin != null)
+		{
+			// 指定あり
+	
+			String [] uploadImageMargin2 = uploadImageMargin.split(",");
+	
+			if (uploadImageMargin2.length == 2)
+			{
+				// 値は２つ
+	
+				uploadImageMarginX = Integer.valueOf(uploadImageMargin2[0]);
+				uploadImageMarginY = Integer.valueOf(uploadImageMargin2[1]);
+			}
+		}
+	
+		if (!subFolder.exists())
+		{
+			// 存在しない
+	
+			new File(subFolder.getPath()).mkdir();
+		}
+	
+		for (int i=0 ; i<uploadfiles.length ; i++)
+		{
+			String destinationFileName =
+				String.format("%s_%02d.%s", dmmUrlCid, imageId, "jpg");
+	
+			File destinationFile = new File(subFolder, destinationFileName);
+	
+			// リサイズ
+			ImageCollection.toJpegAndResize(
+				uploadfiles[i],
+				destinationFile,
+				uploadImageMarginX,
+				uploadImageMarginY);
+	
+			destinationFileName =
+				new File(
+					dmmUrlCid.substring(0, 1),
+					destinationFileName).getPath();
+	
+			insert(
+				connection,
+				titleId,
+				imageId,
+				destinationFileName);
+	
+			imageId++;
+	
+			uploadedFiles.add(destinationFileName);
+		}
+	
+		return uploadedFiles;
 	}
 }

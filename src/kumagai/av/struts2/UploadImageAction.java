@@ -1,15 +1,23 @@
 package kumagai.av.struts2;
 
-import java.awt.image.*;
-import java.io.*;
-import java.util.*;
-import java.sql.*;
-import javax.imageio.*;
-import javax.servlet.*;
-import com.microsoft.sqlserver.jdbc.*;
-import org.apache.struts2.*;
-import org.apache.struts2.convention.annotation.*;
-import kumagai.av.*;
+import java.io.File;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.util.ArrayList;
+
+import javax.servlet.ServletContext;
+
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import kumagai.av.Image;
+import kumagai.av.ImageCollection;
 
 /**
  * 画像ファイルアップロードアクション。
@@ -23,9 +31,6 @@ import kumagai.av.*;
 })
 public class UploadImageAction
 {
-	static private final int maxWidth = 700;
-	static private final int maxHeight = 480;
-
 	/**
 	 * 画像変換テストコード。
 	 * @param args [0]=変換元 [1]=変換先
@@ -38,44 +43,8 @@ public class UploadImageAction
 		{
 			File sourceFile = new File(args[0]);
 			File destinationFile = new File(args[1]);
-			toJpegAndResize(sourceFile, destinationFile, 0, 0);
+			ImageCollection.toJpegAndResize(sourceFile, destinationFile, 0, 0);
 		}
-	}
-
-	/**
-	 * PNGからjPEGへの変換とリサイズ。
-	 * @param sourceFile 元ファイル
-	 * @param destinationFile 出力ファイル
-	 * @param marginX 左右の余白
-	 * @param marginY 上下の余白
-	 */
-	static void toJpegAndResize(File sourceFile, File destinationFile, int marginX, int marginY)
-		throws IOException
-	{
-		BufferedImage sourceImage = ImageIO.read(sourceFile);
-		int width = sourceImage.getWidth();
-		int height = sourceImage.getHeight();
-		int width2 = width - marginX * 2;
-		int height2 = height - marginY * 2;
-
-		while ((width2 > maxWidth) || (height2 > maxHeight))
-		{
-			width /= 2;
-			height /= 2;
-			width2 /= 2;
-			height2 /= 2;
-			marginX /= 2;
-			marginY /= 2;
-		}
-
-		BufferedImage resizeImage =
-			new BufferedImage(width2-1, height2, BufferedImage.TYPE_INT_RGB);
-		java.awt.Image resizeImage2 =
-			sourceImage.getScaledInstance
-				(width, height, java.awt.Image.SCALE_AREA_AVERAGING);
-		resizeImage.getGraphics().drawImage
-			(resizeImage2, -marginX, -marginY, width, height, null);
-		ImageIO.write(resizeImage, "jpg", destinationFile);
 	}
 
 	/**
@@ -105,7 +74,7 @@ public class UploadImageAction
 	public int titleId;
 	public String dmmUrlCid;
 	public String destinationFileName;
-	public ArrayList<String> uploadedFiles = new ArrayList<String>();
+	public ArrayList<String> uploadedFiles;
 	public String uploadImageMargin;
 	public String exception;
 
@@ -130,6 +99,8 @@ public class UploadImageAction
 				dmmUrlCid != null &&
 				dmmUrlCid.length() > 0)
 			{
+				// 必要なパラメータあり
+
 				DriverManager.registerDriver(new SQLServerDriver());
 
 				Connection connection = DriverManager.getConnection(dbUrl);
@@ -140,11 +111,6 @@ public class UploadImageAction
 						(connection, Integer.toString(titleId));
 
 				File subFolder = new File(folderPath, dmmUrlCid.substring(0, 1));
-
-				if (!subFolder.exists())
-				{
-					new File(subFolder.getPath()).mkdir();
-				}
 
 				int lastImageId = 0;
 				for (Image image : imageFiles)
@@ -157,54 +123,9 @@ public class UploadImageAction
 
 				int imageId = lastImageId + 1;
 
-				// 余白幅セット
-				int uploadImageMarginX = 0;
-				int uploadImageMarginY = 0;
-
-				if (uploadImageMargin != null)
-				{
-					// 指定あり
-
-					String [] uploadImageMargin2 = uploadImageMargin.split(",");
-
-					if (uploadImageMargin2.length == 2)
-					{
-						// 値は２つ
-
-						uploadImageMarginX = Integer.valueOf(uploadImageMargin2[0]);
-						uploadImageMarginY = Integer.valueOf(uploadImageMargin2[1]);
-					}
-				}
-
-				for (int i=0 ; i<uploadfile.length ; i++)
-				{
-					destinationFileName =
-						String.format("%s_%02d.%s", dmmUrlCid, imageId, "jpg");
-
-					File destinationFile = new File(subFolder, destinationFileName);
-
-					// リサイズ
-					toJpegAndResize(
-						uploadfile[i],
-						destinationFile,
-						uploadImageMarginX,
-						uploadImageMarginY);
-
-					destinationFileName =
-						new File(
-							dmmUrlCid.substring(0, 1),
-							destinationFileName).getPath();
-
-					ImageCollection.insert(
-						connection,
-						titleId,
-						imageId,
-						destinationFileName);
-
-					imageId++;
-
-					uploadedFiles.add(destinationFileName);
-				}
+				uploadedFiles =
+					ImageCollection.uploadFiles
+						(connection, subFolder, uploadfile, dmmUrlCid, titleId, imageId, uploadImageMargin);
 
 				connection.close();
 
@@ -212,6 +133,8 @@ public class UploadImageAction
 			}
 			else
 			{
+				// 必要なパラメータなし
+
 				exception =
 					String.format(
 						"uploadfile=%s folderPath=%s dbUrl=%s dmmUrlCid=%s",
@@ -219,15 +142,13 @@ public class UploadImageAction
 						folderPath,
 						dbUrl,
 						dmmUrlCid);
-
-				return "error";
 			}
 		}
 		catch (Exception exception)
 		{
 			this.exception = exception.toString();
-
-			return "error";
 		}
+
+		return "error";
 	}
 }
