@@ -5,7 +5,7 @@
 <html>
 	<head>
 		<title>AV - 画像更新</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<link rel="stylesheet" type="text/css" href="hatena.css">
 	</head>
 
@@ -17,7 +17,7 @@
 
 		<img src="/kumagai/image?folder=AVImageFolder&filename=<s:property value="fileName" />"><br>
 
-		<s:form action="uploadimage" method="post" enctype="multipart/form-data" theme="simple">
+		<s:form action="replaceimage2" method="post" enctype="multipart/form-data" theme="simple">
 			<input type="file" name="uploadfile" multiple="multiple" size="75" />
 			<input type="hidden" name="fileName" value="<s:property value='fileName' />">
 			余白：

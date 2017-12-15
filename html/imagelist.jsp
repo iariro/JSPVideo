@@ -5,7 +5,7 @@
 <html>
 	<head>
 		<title>AV - 画像一覧</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<link rel="stylesheet" type="text/css" href="hatena.css">
 	</head>
 
@@ -59,9 +59,9 @@
 				</td>
 
 				<td style='padding:0px; border:0px;'>
-				<s:form action="replaceimage" theme="simple">
+				<s:form action="replaceimage1" theme="simple">
 					<input type="hidden" name="imageid" value="<s:property value='id' />">
-					<input type="hidden" name="filename" value="<s:property value='fileName' />">
+					<input type="hidden" name="fileName" value="<s:property value='fileName' />">
 					<input type="submit" value="画像更新" />
 				</s:form>
 				</td>

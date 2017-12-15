@@ -25,9 +25,9 @@ import kumagai.av.ImageCollection;
 })
 public class ReplaceImage2Action
 {
-	public File uploadfile;
-	public String uploadfileContentType;
-	public String uploadfileFileName;
+	public File [] uploadfile;
+	public String [] uploadfileContentType;
+	public String [] uploadfileFileName;
 	public String fileName;
 	public String uploadImageMargin;
 
@@ -56,7 +56,7 @@ public class ReplaceImage2Action
 			{
 				// 必要なパラメータあり
 
-				ImageCollection.replaceFile(folderPath, uploadfile, fileName, uploadImageMargin);
+				ImageCollection.replaceFile(folderPath, uploadfile[0], fileName, uploadImageMargin);
 
 				return "success";
 			}
@@ -69,7 +69,7 @@ public class ReplaceImage2Action
 		}
 		catch (Exception exception)
 		{
-			this.exception = exception.toString();
+			this.exception = String.format("%s %s %s %s", exception.toString(), uploadfile[0], fileName, uploadImageMargin);
 		}
 
 		return "error";

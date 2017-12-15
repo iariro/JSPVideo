@@ -401,7 +401,7 @@ public class ImageCollection
 		int height = sourceImage.getHeight();
 		int width2 = width - marginX * 2;
 		int height2 = height - marginY * 2;
-	
+
 		while ((width2 > maxWidth) || (height2 > maxHeight))
 		{
 			width /= 2;
@@ -411,7 +411,7 @@ public class ImageCollection
 			marginX /= 2;
 			marginY /= 2;
 		}
-	
+
 		BufferedImage resizeImage =
 			new BufferedImage(width2-1, height2, BufferedImage.TYPE_INT_RGB);
 		java.awt.Image resizeImage2 =
@@ -437,53 +437,53 @@ public class ImageCollection
 		throws IOException, SQLException
 	{
 		ArrayList<String> uploadedFiles = new ArrayList<String>();
-	
+
 		// 余白幅セット
 		int uploadImageMarginX = 0;
 		int uploadImageMarginY = 0;
-	
+
 		if (uploadImageMargin != null)
 		{
 			// 指定あり
-	
+
 			String [] uploadImageMargin2 = uploadImageMargin.split(",");
-	
+
 			if (uploadImageMargin2.length == 2)
 			{
 				// 値は２つ
-	
+
 				uploadImageMarginX = Integer.valueOf(uploadImageMargin2[0]);
 				uploadImageMarginY = Integer.valueOf(uploadImageMargin2[1]);
 			}
 		}
-	
+
 		File subFolder = new File(folderPath, dmmUrlCid.substring(0, 1));
 		if (!subFolder.exists())
 		{
 			// 存在しない
-	
+
 			new File(subFolder.getPath()).mkdir();
 		}
-	
+
 		for (int i=0 ; i<uploadfiles.length ; i++)
 		{
 			String destinationFileName =
 				String.format("%s_%02d.%s", dmmUrlCid, imageId, "jpg");
-	
+
 			File destinationFile = new File(subFolder, destinationFileName);
-	
+
 			// リサイズ
 			ImageCollection.toJpegAndResize(
 				uploadfiles[i],
 				destinationFile,
 				uploadImageMarginX,
 				uploadImageMarginY);
-	
+
 			destinationFileName =
 				new File(
 					dmmUrlCid.substring(0, 1),
 					destinationFileName).getPath();
-	
+
 			if (connection != null)
 			{
 				insert(
@@ -492,12 +492,12 @@ public class ImageCollection
 					imageId,
 					destinationFileName);
 			}
-	
+
 			imageId++;
-	
+
 			uploadedFiles.add(destinationFileName);
 		}
-	
+
 		return uploadedFiles;
 	}
 
@@ -538,7 +538,7 @@ public class ImageCollection
 			new File(subFolder.getPath()).mkdir();
 		}
 
-		File destinationFile = new File(subFolder, fileName);
+		File destinationFile = new File(folderPath, fileName);
 
 		// リサイズ
 		ImageCollection.toJpegAndResize(
