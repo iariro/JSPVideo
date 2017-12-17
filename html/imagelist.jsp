@@ -43,10 +43,10 @@
 				<table style='margin:0px; border:0px;'><tr>
 
 				<td style='padding:0px; border:0px;'>
-				<s:form action="addcostume1" theme="simple">
-					<input type="hidden" name="titleid" value="<s:property value='titleid' />">
+				<s:form action="replaceimage1" theme="simple">
 					<input type="hidden" name="imageid" value="<s:property value='id' />">
-					<input type="submit" value="コスチューム">
+					<input type="hidden" name="fileName" value="<s:property value='fileName' />">
+					<input type="submit" value="画像更新" />
 				</s:form>
 				</td>
 
@@ -59,10 +59,10 @@
 				</td>
 
 				<td style='padding:0px; border:0px;'>
-				<s:form action="replaceimage1" theme="simple">
+				<s:form action="addcostume1" theme="simple">
+					<input type="hidden" name="titleid" value="<s:property value='titleid' />">
 					<input type="hidden" name="imageid" value="<s:property value='id' />">
-					<input type="hidden" name="fileName" value="<s:property value='fileName' />">
-					<input type="submit" value="画像更新" />
+					<input type="submit" value="コスチューム">
 				</s:form>
 				</td>
 
