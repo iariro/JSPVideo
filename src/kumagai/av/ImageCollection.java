@@ -281,6 +281,35 @@ public class ImageCollection
 	}
 
 	/**
+	 * 画像位置情報を入れ替え
+	 * @param connection DB接続オブジェクト
+	 * @param position1 位置１
+	 * @param position2 位置２
+	 */
+	static public void swapImagePosition(Connection connection, int position1, int position2)
+		throws SQLException
+	{
+		String sql =
+			"update image SET position = CASE " +
+			"WHEN id=? THEN (SELECT position FROM image WHERE id=?) " +
+			"WHEN id=? THEN (SELECT position FROM image WHERE id=?) " +
+			"ELSE position END " +
+			"WHERE id in (?, ?)";
+
+		PreparedStatement statement = connection.prepareStatement(sql);
+
+		statement.setInt(1, position1);
+		statement.setInt(2, position2);
+		statement.setInt(3, position2);
+		statement.setInt(4, position1);
+		statement.setInt(5, position1);
+		statement.setInt(6, position2);
+		ResultSet results = statement.executeQuery();
+		results.close();
+		statement.close();
+	}
+
+	/**
 	 * 画像ファイルの更新日時から最新の画像ファイルを取得
 	 * @param filePath 画像フォルダ
 	 * @return 画像リスト
