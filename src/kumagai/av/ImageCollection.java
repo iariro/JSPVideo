@@ -283,10 +283,10 @@ public class ImageCollection
 	/**
 	 * 画像位置情報を入れ替え
 	 * @param connection DB接続オブジェクト
-	 * @param position1 位置１
-	 * @param position2 位置２
+	 * @param imageId1 画像１
+	 * @param imageId2 画像２
 	 */
-	static public void swapImagePosition(Connection connection, int position1, int position2)
+	static public void swapImagePosition(Connection connection, int imageId1, int imageId2)
 		throws SQLException
 	{
 		String sql =
@@ -298,12 +298,12 @@ public class ImageCollection
 
 		PreparedStatement statement = connection.prepareStatement(sql);
 
-		statement.setInt(1, position1);
-		statement.setInt(2, position2);
-		statement.setInt(3, position2);
-		statement.setInt(4, position1);
-		statement.setInt(5, position1);
-		statement.setInt(6, position2);
+		statement.setInt(1, imageId1);
+		statement.setInt(2, imageId2);
+		statement.setInt(3, imageId2);
+		statement.setInt(4, imageId1);
+		statement.setInt(5, imageId1);
+		statement.setInt(6, imageId2);
 		ResultSet results = statement.executeQuery();
 		results.close();
 		statement.close();

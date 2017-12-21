@@ -74,6 +74,22 @@
 				</s:form>
 				</td>
 
+				<td style='padding:0px; border:0px;'>
+				<s:form action="changeimageposition" theme="simple">
+					<input type="hidden" name="imageId1" value="<s:property value='id' />">
+					<input type="hidden" name="imageId2" value="<s:property value='idBefore' />">
+					<input type="submit" value="↑">
+				</s:form>
+				</td>
+
+				<td style='padding:0px; border:0px;'>
+				<s:form action="changeimageposition" theme="simple">
+					<input type="hidden" name="imageId1" value="<s:property value='id' />">
+					<input type="hidden" name="imageId2" value="<s:property value='idAfter' />">
+					<input type="submit" value="↓">
+				</s:form>
+				</td>
+
 				</tr>
 				</table>
 

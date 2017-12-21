@@ -2,7 +2,6 @@ package kumagai.av.struts2;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.util.ArrayList;
 
 import javax.servlet.ServletContext;
 
@@ -15,34 +14,29 @@ import org.apache.struts2.convention.annotation.Results;
 import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 
-import kumagai.av.Image;
 import kumagai.av.ImageCollection;
-import kumagai.av.ImageForChangePosition;
-import kumagai.av.Title1;
-import kumagai.av.TitleCollection;
 
 /**
- * 画像リスト表示アクション用フォーム。
+ * 画像順番変更アクション。
  * @author kumagai
  */
 @Namespace("/av")
 @Results
 ({
-	@Result(name="success", location="/av/imagelist.jsp"),
+	@Result(name="success", location="/av/changeimageposition.jsp"),
 	@Result(name="error", location="/av/error.jsp")
 })
-public class ImageListAction
+public class ChangeImagePositionAction
 {
-	public String titleid;
-	public String dmmImageUrl;
-	public ArrayList<ImageForChangePosition> images;
+	public int imageId1;
+	public int imageId2;
 	public String message;
 
 	/**
-	 * 画像リスト表示アクション用フォーム。
+	 * 画像順番変更アクション。
 	 * @return 処理結果
 	 */
-	@Action("imagelist")
+	@Action("changeimageposition")
 	public String execute()
 		throws Exception
 	{
@@ -56,42 +50,7 @@ public class ImageListAction
 			try
 			{
 				Connection connection = DriverManager.getConnection(url);
-
-				Title1 title = TitleCollection.getOneTitle1(connection, titleid);
-
-				ArrayList<Image> images = ImageCollection.getFileNamesById(connection, titleid);
-				this.images = new ArrayList<ImageForChangePosition>();
-				for (int i=0 ; i<images.size() ; i++)
-				{
-					Image imageBefore = null;
-					Image imageAfter = null;
-					if (i > 0)
-					{
-						// 前あり
-
-						imageBefore = images.get(i - 1);
-					}
-					if (i + 1 < images.size())
-					{
-						// 後ろあり
-
-						imageAfter = images.get(i + 1);
-					}
-
-					this.images.add(
-						new ImageForChangePosition(
-							images.get(i),
-							imageBefore.id,
-							imageAfter.id));
-				}
-
-				if (title.dmmUrl != null)
-				{
-					// DMM URLは存在する
-
-					dmmImageUrl = Title1.getDmmImageUrlPl(title.dmmUrl);
-				}
-
+				ImageCollection.swapImagePosition(connection, imageId1, imageId2);
 				connection.close();
 
 				return "success";
