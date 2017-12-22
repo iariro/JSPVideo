@@ -81,8 +81,8 @@ public class ImageListAction
 					this.images.add(
 						new ImageForChangePosition(
 							images.get(i),
-							imageBefore.id,
-							imageAfter.id));
+							imageBefore != null ? imageBefore.id : null,
+							imageAfter != null ? imageAfter.id : null));
 				}
 
 				if (title.dmmUrl != null)

@@ -304,8 +304,7 @@ public class ImageCollection
 		statement.setInt(4, imageId1);
 		statement.setInt(5, imageId1);
 		statement.setInt(6, imageId2);
-		ResultSet results = statement.executeQuery();
-		results.close();
+		statement.executeUpdate();
 		statement.close();
 	}
 

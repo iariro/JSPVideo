@@ -8,8 +8,8 @@ import java.util.ArrayList;
 public class ImageForChangePosition
 {
 	public final int id;
-	public final int idBefore;
-	public final int idAfter;
+	public final Integer idBefore;
+	public final Integer idAfter;
 	public final int titleId;
 	public final String position;
 	public final String fileName;
@@ -22,7 +22,7 @@ public class ImageForChangePosition
 	 * @param positionBefore
 	 * @param positionAfter
 	 */
-	public ImageForChangePosition(Image image, int idBefore, int idAfter)
+	public ImageForChangePosition(Image image, Integer idBefore, Integer idAfter)
 	{
 		this.id = image.id;
 		this.titleId = image.titleId;

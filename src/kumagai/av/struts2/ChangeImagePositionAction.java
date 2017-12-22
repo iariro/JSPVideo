@@ -28,8 +28,8 @@ import kumagai.av.ImageCollection;
 })
 public class ChangeImagePositionAction
 {
-	public int imageId1;
-	public int imageId2;
+	public Integer imageId1;
+	public Integer imageId2;
 	public String message;
 
 	/**
@@ -40,6 +40,12 @@ public class ChangeImagePositionAction
 	public String execute()
 		throws Exception
 	{
+		if (imageId1 == null || imageId2 == null)
+		{
+			message = "終端であり交換不能です";
+			return "error";
+		}
+
 		ServletContext context = ServletActionContext.getServletContext();
 		String url = context.getInitParameter("AVSqlserverUrl");
 
