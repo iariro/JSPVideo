@@ -1,7 +1,11 @@
 package kumagai.av;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * DVD-Rダビング情報コレクション。
@@ -13,8 +17,7 @@ public class DvdrDubbingCollection
 	static public void main(String [] args)
 		throws SQLException
 	{
-		Connection connection = DriverManager.getConnection(
-			"jdbc:sqlserver://localhost:2144;DatabaseName=AV;User=sa;Password=p@ssw0rd;");
+		Connection connection = DriverManager.getConnection(DBInfo.dbUrl);
 
 		DvdrDubbingCollection dvdrDubbingCollection =
 			new DvdrDubbingCollection

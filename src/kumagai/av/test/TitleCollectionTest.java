@@ -1,10 +1,16 @@
 package kumagai.av.test;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.text.ParseException;
-import junit.framework.*;
-import kumagai.av.*;
+import java.util.ArrayList;
+
+import junit.framework.TestCase;
+import kumagai.av.DBInfo;
+import kumagai.av.DiaryReviewCollection;
+import kumagai.av.Title3;
+import kumagai.av.TitleCollection;
 
 public class TitleCollectionTest
 	extends TestCase
@@ -12,9 +18,7 @@ public class TitleCollectionTest
 	public static void main(String[] args)
 		throws Exception
 	{
-		Connection connection =
-			DriverManager.getConnection(
-				"jdbc:sqlserver://localhost:2144;DatabaseName=AV;User=sa;Password=p@ssw0rd;");
+		Connection connection = DriverManager.getConnection(DBInfo.dbUrl);
 
 		DiaryReviewCollection diaryReviewCollection =
 				new DiaryReviewCollection(connection, null);
@@ -41,9 +45,7 @@ public class TitleCollectionTest
 	public void test1()
 		throws SQLException, ParseException
 	{
-		Connection connection =
-			DriverManager.getConnection(
-				"jdbc:sqlserver://localhost:2144;DatabaseName=AV;User=sa;Password=p@ssw0rd;");
+		Connection connection = DriverManager.getConnection(DBInfo.dbUrl);
 
 		/*
 		// by year
@@ -95,9 +97,7 @@ public class TitleCollectionTest
 	public void testGetPurchasedAndNoImageList()
 		throws SQLException, ParseException
 	{
-		Connection connection =
-			DriverManager.getConnection(
-				"jdbc:sqlserver://localhost:2144;DatabaseName=AV;User=sa;Password=p@ssw0rd;");
+		Connection connection = DriverManager.getConnection(DBInfo.dbUrl);
 
 		ArrayList<Title3> titleCollection =
 			TitleCollection.getPurchasedAndNoImageList(connection, 1);

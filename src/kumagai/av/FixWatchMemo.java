@@ -1,6 +1,8 @@
 package kumagai.av;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 /**
  * 購入・除外予定の確定処理。
@@ -13,9 +15,7 @@ public class FixWatchMemo
 	public static void main(String[] args)
 		throws SQLException
 	{
-		Connection connection =
-			DriverManager.getConnection(
-				"jdbc:sqlserver://localhost:2144;DatabaseName=AV;User=sa;Password=p@ssw0rd;");
+		Connection connection = DriverManager.getConnection(DBInfo.dbUrl);
 
 		int count1 =
 			WatchCollection.updateUnfixMemo

@@ -1,14 +1,26 @@
 package kumagai.av.struts2;
 
-import java.io.*;
-import java.sql.*;
-import java.util.*;
-import java.util.regex.*;
-import javax.servlet.*;
-import com.microsoft.sqlserver.jdbc.*;
-import org.apache.struts2.*;
-import org.apache.struts2.convention.annotation.*;
-import kumagai.av.*;
+import java.io.File;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.servlet.ServletContext;
+
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.Result;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import kumagai.av.DBInfo;
+import kumagai.av.Image;
+import kumagai.av.ImageCollection;
+import kumagai.av.InvalidImageFiles;
 
 class AddBulkImagesActionResult
 {
@@ -28,9 +40,8 @@ public class AddBulkImagesAction
     	throws SQLException
 	{
 		String filePath = "C:/Users/kumagai/Pictures/AV/";
-		String dbUrl = "jdbc:sqlserver://localhost:2144;DatabaseName=AV;User=sa;Password=p@ssw0rd;";
 
-		new AddBulkImagesAction().addBulkImages(filePath, dbUrl);
+		new AddBulkImagesAction().addBulkImages(filePath, DBInfo.dbUrl);
 	}
 
 	public ArrayList<Image> addedImage;

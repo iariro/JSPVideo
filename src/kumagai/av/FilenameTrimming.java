@@ -1,9 +1,12 @@
 package kumagai.av;
 
-import java.io.*;
-import java.sql.*;
-import java.util.*;
-import java.util.regex.*;
+import java.io.File;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 画像ファイルの連番のゼロパディング。
@@ -18,9 +21,7 @@ public class FilenameTrimming
 	public static void main(String[] args)
 		throws SQLException
 	{
-		Connection connection =
-			DriverManager.getConnection(
-				"jdbc:sqlserver://localhost:2144;DatabaseName=AV;User=sa;Password=p@ssw0rd;");
+		Connection connection = DriverManager.getConnection(DBInfo.dbUrl);
 
 		String filePath = "C:/Users/kumagai/Pictures/AV/";
 

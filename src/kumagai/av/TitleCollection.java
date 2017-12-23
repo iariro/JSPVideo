@@ -26,8 +26,7 @@ public class TitleCollection
 	public static void main(String[] args)
 		throws Exception
 	{
-		Connection connection =
-			DriverManager.getConnection("jdbc:sqlserver://localhost:2144;DatabaseName=AV;User=sa;Password=p@ssw0rd;");
+		Connection connection = DriverManager.getConnection(DBInfo.dbUrl);
 
 		Title1 title = getOneTitle1(connection, "157");
 

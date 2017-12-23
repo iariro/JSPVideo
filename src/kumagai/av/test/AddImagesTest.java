@@ -1,11 +1,19 @@
 package kumagai.av.test;
 
-import java.io.*;
-import java.sql.*;
-import java.util.*;
-import java.util.regex.*;
-import com.microsoft.sqlserver.jdbc.*;
-import kumagai.av.*;
+import java.io.File;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import kumagai.av.DBInfo;
+import kumagai.av.Image;
+import kumagai.av.ImageCollection;
+import kumagai.av.InvalidImageFiles;
 
 public class AddImagesTest
 {
@@ -23,9 +31,7 @@ public class AddImagesTest
 
 		DriverManager.registerDriver(new SQLServerDriver());
 
-		Connection connection =
-			DriverManager.getConnection(
-				"jdbc:sqlserver://localhost:2144;DatabaseName=AV;User=sa;Password=p@ssw0rd;");
+		Connection connection = DriverManager.getConnection(DBInfo.dbUrl);
 
 		ImageCollection imageCollection = new ImageCollection(connection);
 		InvalidImageFiles notRefferedImage =

@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import junit.framework.TestCase;
+import kumagai.av.DBInfo;
 import kumagai.av.WatchCollection;
 import kumagai.av.WatchInformation;
 
@@ -15,9 +16,7 @@ public class WatchCollectionTest
 	public static void main(String[] args)
 		throws SQLException
 	{
-		Connection connection =
-			DriverManager.getConnection(
-				"jdbc:sqlserver://localhost:2144;DatabaseName=AV;User=sa;Password=p@ssw0rd;");
+		Connection connection = DriverManager.getConnection(DBInfo.dbUrl);
 
 		WatchCollection.insertAsUpdate(connection, 183, "2000/1/1", "2000/1/1", null, "test");
 
@@ -27,9 +26,7 @@ public class WatchCollectionTest
 	public void testGet()
 		throws SQLException
 	{
-		Connection connection =
-			DriverManager.getConnection(
-				"jdbc:sqlserver://localhost:2144;DatabaseName=AV;User=sa;Password=p@ssw0rd;");
+		Connection connection = DriverManager.getConnection(DBInfo.dbUrl);
 
 		ArrayList<WatchInformation> watchInformations =
 			WatchCollection.getByTitleId(connection, "183");
@@ -45,9 +42,7 @@ public class WatchCollectionTest
 	public void testGetNotExistTitleWatch()
 		throws SQLException
 	{
-		Connection connection =
-			DriverManager.getConnection(
-				"jdbc:sqlserver://localhost:2144;DatabaseName=AV;User=sa;Password=p@ssw0rd;");
+		Connection connection = DriverManager.getConnection(DBInfo.dbUrl);
 
 		ArrayList<WatchInformation> watchInformations =
 			WatchCollection.getNotExistTitleWatch(connection);
@@ -65,9 +60,7 @@ public class WatchCollectionTest
 	public void testGetInvalidDate()
 		throws SQLException
 	{
-		Connection connection =
-			DriverManager.getConnection(
-				"jdbc:sqlserver://localhost:2144;DatabaseName=AV;User=sa;Password=p@ssw0rd;");
+		Connection connection = DriverManager.getConnection(DBInfo.dbUrl);
 
 		ArrayList<WatchInformation> watchInformations =
 			WatchCollection.getInvalidDate(connection);

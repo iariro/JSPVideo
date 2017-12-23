@@ -1,10 +1,17 @@
 package kumagai.av.test;
 
-import java.sql.*;
-import java.text.*;
-import java.util.*;
-import ktool.datetime.*;
-import kumagai.av.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.ArrayList;
+
+import ktool.datetime.DateTime;
+import kumagai.av.DBInfo;
+import kumagai.av.Title3;
+import kumagai.av.Title3AndRandomValue;
+import kumagai.av.Title3ShuffleCollection;
+import kumagai.av.TitleCollection;
 
 public class Title3ShuffleCollectionTest1
 {
@@ -27,9 +34,7 @@ public class Title3ShuffleCollectionTest1
 			date = args[2];
 		}
 
-		Connection connection =
-			DriverManager.getConnection(
-				"jdbc:sqlserver://localhost:2144;DatabaseName=AV;User=sa;Password=p@ssw0rd;");
+		Connection connection = DriverManager.getConnection(DBInfo.dbUrl);
 
 		ArrayList<Title3> titleCollection =
 			new TitleCollection(

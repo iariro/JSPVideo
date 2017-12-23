@@ -1,9 +1,14 @@
 package kumagai.av;
 
-import java.sql.*;
-import java.text.*;
-import java.util.*;
-import ktool.string.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.ArrayList;
+
+import ktool.string.DateCollection;
 
 /**
  * 日記レビュー情報コレクション。
@@ -19,8 +24,7 @@ public class DiaryReviewCollection
 	public static void main(String[] args)
 		throws SQLException, ParseException
 	{
-		Connection connection = DriverManager.getConnection(
-			"jdbc:sqlserver://localhost:2144;DatabaseName=AV;User=sa;Password=p@ssw0rd;");
+		Connection connection = DriverManager.getConnection(DBInfo.dbUrl);
 
 		DiaryReviewCollection diaryReviewCollection =
 			new DiaryReviewCollection(connection, null);

@@ -1,8 +1,10 @@
 package kumagai.av;
 
-import java.sql.*;
-import java.text.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.ArrayList;
 
 /**
  * 作品の状態履歴一覧情報。
@@ -18,8 +20,7 @@ public class WatchMemoTable
 	static public void main(String [] args)
 		throws SQLException, ParseException
 	{
-		Connection connection = DriverManager.getConnection(
-			"jdbc:sqlserver://localhost:2144;DatabaseName=AV;User=sa;Password=p@ssw0rd;");
+		Connection connection = DriverManager.getConnection(DBInfo.dbUrl);
 
 		String [] dates = { "2013/12/13", "2014/03/13", "today" };
 

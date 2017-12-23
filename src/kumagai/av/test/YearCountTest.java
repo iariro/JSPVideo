@@ -1,18 +1,23 @@
 package kumagai.av.test;
 
-import java.sql.*;
-import java.text.*;
-import java.util.*;
-import kumagai.av.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.ArrayList;
+
+import kumagai.av.DBInfo;
+import kumagai.av.ReleaseYearAndCountCollection;
+import kumagai.av.WatchYearAndCountCollection;
+import kumagai.av.YearAndCount;
+import kumagai.av.YearStat;
 
 public class YearCountTest
 {
 	static public void main(String [] args)
 		throws SQLException, ParseException
 	{
-		Connection connection =
-			DriverManager.getConnection(
-				"jdbc:sqlserver://localhost:2144;DatabaseName=AV;User=sa;Password=p@ssw0rd;");
+		Connection connection = DriverManager.getConnection(DBInfo.dbUrl);
 
 		ArrayList<YearAndCount> rental1Stat =
 			new ReleaseYearAndCountCollection(connection, "rentaldate");

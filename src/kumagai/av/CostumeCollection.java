@@ -20,9 +20,7 @@ public class CostumeCollection
 	static public void main(String [] args)
 		throws SQLException
 	{
-		Connection connection =
-			DriverManager.getConnection(
-				"jdbc:sqlserver://localhost:2144;DatabaseName=AV;User=sa;Password=p@ssw0rd;");
+		Connection connection = DriverManager.getConnection(DBInfo.dbUrl);
 
 		CostumeCollection costumeCollection = new CostumeCollection(connection, null);
 
