@@ -15,6 +15,7 @@ import java.util.Comparator;
 import javax.imageio.ImageIO;
 
 import ktool.datetime.DateTime;
+import kumagai.av.imageutility.FilenameAndTitleCollection;
 
 /**
  * 画像情報コレクション。
@@ -412,6 +413,28 @@ public class ImageCollection
 		}
 
 		return invalidImageFiles;
+	}
+
+	/**
+	 * 全画像とタイトルのコレクションを取得
+	 * @param connection DB接続オブジェクト
+	 * @return 全画像とタイトルのコレクション
+	 */
+	static public FilenameAndTitleCollection getAllImageAndTitle(Connection connection)
+		throws SQLException
+	{
+		String sql = "select filename,title from image join title on title.id=image.titleid order by filename";
+
+		Statement statement = connection.createStatement();
+		ResultSet results = statement.executeQuery(sql);
+
+		FilenameAndTitleCollection filenameAndTitleCollection =
+			new FilenameAndTitleCollection(results);
+
+		results.close();
+		statement.close();
+
+		return filenameAndTitleCollection;
 	}
 
 	/**
