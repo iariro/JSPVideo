@@ -22,7 +22,7 @@ public class ImageMarginCheck
 	/**
 	 * 画像の余白やDMMプレイヤーのコントロールを検出
 	 */
-	public static void main(String[] args)
+	static public void main(String[] args)
 		throws SQLException, IOException
 	{
 		DriverManager.registerDriver(new SQLServerDriver());
@@ -33,6 +33,7 @@ public class ImageMarginCheck
 		FilenameAndTitleCollection checkResult = checkMargin(filenameAndTitleCollection);
 		for (FilenameAndTitle filenameAndTitle : checkResult)
 		{
+			//cutMargin(new File(DBInfo.imageBasePath, filenameAndTitle.filename), 83, 0);
 			System.out.println(filenameAndTitle);
 		}
 
@@ -41,6 +42,32 @@ public class ImageMarginCheck
 		{
 			System.out.println(filenameAndTitle);
 		}
+	}
+
+	/**
+	 * 画像の左右マージンカット
+	 * @param file 対象ファイル
+	 * @param marginX 横方向マージン
+	 * @param marginY 縦方向マージン
+	 */
+	static void cutMargin(File file, int marginX, int marginY)
+		throws IOException
+	{
+		BufferedImage sourceImage = ImageIO.read(file);
+
+		int width = sourceImage.getWidth();
+		int height = sourceImage.getHeight();
+		int width2 = width - marginX * 2;
+		int height2 = height - marginY * 2;
+
+		BufferedImage resizeImage =
+			new BufferedImage(width2, height2, BufferedImage.TYPE_INT_RGB);
+		java.awt.Image resizeImage2 =
+			sourceImage.getScaledInstance
+				(width, height, java.awt.Image.SCALE_AREA_AVERAGING);
+		resizeImage.getGraphics().drawImage
+			(resizeImage2, -marginX - 1, -marginY, width, height, null);
+		ImageIO.write(resizeImage, "jpg", file);
 	}
 
 	/**
@@ -58,6 +85,8 @@ public class ImageMarginCheck
 		{
 			BufferedImage image =
 				ImageIO.read(new File(DBInfo.imageBasePath, filenameAndTitle.filename));
+			filenameAndTitle.width = image.getWidth();
+			filenameAndTitle.height = image.getHeight();
 			boolean findColor = false;
 			for (int y=0 ; y<image.getHeight() ; y += 20)
 			{
@@ -101,6 +130,8 @@ public class ImageMarginCheck
 			BufferedImage image =
 				ImageIO.read(new File(DBInfo.imageBasePath, filenameAndTitle.filename));
 
+			filenameAndTitle.width = image.getWidth();
+			filenameAndTitle.height = image.getHeight();
 			if ((image.getWidth() > 10) && (image.getHeight() > 345))
 			{
 				// 所定の大きさを満たしている

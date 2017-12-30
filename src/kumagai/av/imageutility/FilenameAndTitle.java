@@ -10,6 +10,8 @@ public class FilenameAndTitle
 {
 	public final String filename;
 	public final String title;
+	public int width;
+	public int height;
 
 	/**
 	 * DBレコードの値をフィールドに割り当てる
@@ -25,6 +27,6 @@ public class FilenameAndTitle
 	@Override
 	public String toString()
 	{
-		return String.format("%s %s", filename, title);
+		return String.format("%s %s %d %d", filename, title, width, height);
 	}
 }
