@@ -9,6 +9,7 @@
 		<link rel="stylesheet" type="text/css" href="hatena.css">
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 		<script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
+		<script type="text/javascript" src="dateformat.js"></script>
 		<title>SMART Viewer</title>
 	</head>
 
@@ -24,6 +25,7 @@
 				title: {text: '視聴作品年代散布図'},
 				xAxis: {title: '視聴時期', type: 'datetime'},
 				yAxis: {title: '作品年代', type: 'datetime'},
+				tooltip: { formatter: function () { return '<b>' + this.point.name + '</b><br/>' + dateFormat(new Date(this.point.x));}},
 				series:
 					[
 					{name:'VHSレンタル', data:[ <s:property value="rentalVhsGenerationScatterData" /> ]},
