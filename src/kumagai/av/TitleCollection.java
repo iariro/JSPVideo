@@ -399,7 +399,7 @@ public class TitleCollection
 				{
 					String point =
 						String.format(
-							"{x=%d,y=%d,name='%s'}",
+							"{x:%d,y:%d,name:'%s'}",
 							DateTime.parseDateString(title.buyDate).getCalendar().getTimeInMillis(),
 							new DateTime(title.releaseDate).getCalendar().getTimeInMillis(),
 							title.title);
@@ -444,9 +444,10 @@ public class TitleCollection
 				{
 					String point =
 						String.format(
-							"[%d,%d]",
+							"{x:%d,y:%d,name:'%s'}",
 							DateTime.parseDateString(title.rentalDate).getCalendar().getTimeInMillis(),
-							new DateTime(title.releaseDate).getCalendar().getTimeInMillis());
+							new DateTime(title.releaseDate).getCalendar().getTimeInMillis(),
+							title.title);
 					if (count > 0)
 					{
 						// ２個目以降

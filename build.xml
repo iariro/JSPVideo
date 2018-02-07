@@ -81,6 +81,7 @@
 		<copy todir="${TOMCAT_SITE_HOME}/av/">
 			<fileset dir="html">
 				<include name="**/*.html" />
+				<include name="**/*.js" />
 				<include name="**/*.jsp" />
 				<include name="**/*.css" />
 				<include name="**/*.jpg" />
