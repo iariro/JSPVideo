@@ -16,6 +16,8 @@
 		<div class=main>
 		<div class=day>
 
+			<h1></h1><s:property value="title" /></h1>
+
 			<s:if test="%{dmmImageUrl!=null}">
 				<img src="<s:property value="dmmImageUrl" />">
 			</s:if>

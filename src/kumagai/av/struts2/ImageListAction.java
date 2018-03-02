@@ -34,6 +34,7 @@ import kumagai.av.TitleCollection;
 public class ImageListAction
 {
 	public String titleid;
+	public String title;
 	public String dmmImageUrl;
 	public ArrayList<ImageForChangePosition> images;
 	public String message;
@@ -58,6 +59,7 @@ public class ImageListAction
 				Connection connection = DriverManager.getConnection(url);
 
 				Title1 title = TitleCollection.getOneTitle1(connection, titleid);
+				this.title = title.title;
 
 				ArrayList<Image> images = ImageCollection.getFileNamesById(connection, titleid);
 				this.images = new ArrayList<ImageForChangePosition>();
