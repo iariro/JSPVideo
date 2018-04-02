@@ -74,7 +74,7 @@
 
 			<s:form action="costumelist" theme="simple">
 				<s:submit value="コスチューム一覧" />
-				<s:select name="costumeAndScore" list="#{ 'ブルマ,3':'ブルマ３', 'ブルマ,2':'ブルマ２' , 'ブルマ,1':'ブルマ１' }" />
+				<s:select name="costumeAndScore" list="#{ 'ブルマ,3':'ブルマ３', 'ブルマ,2':'ブルマ２', 'ブルマ,1':'ブルマ１', 'ネクタイ,2':'ネクタイ' }" />
 			</s:form>
 
 		</td>
