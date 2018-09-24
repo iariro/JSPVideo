@@ -1,15 +1,17 @@
-package kumagai.av.uploadfile;
+package kumagai.av.upload;
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 
 import kumagai.av.Image;
 import kumagai.av.ImageCollection;
+import kumagai.av.Title1;
 import kumagai.av.TitleCollection;
 
 /**
@@ -22,11 +24,12 @@ public class UploadImage
 	 * 画像ファイルアップロード。
 	 * @param args [0]=変換元 [1]=変換先
 	 * @throws IOException
+	 * @throws SQLException
 	 */
 	static public void main(String [] args)
-		throws IOException
+		throws IOException, SQLException
 	{
-		if (args.length >= 3)
+		if (args.length >= 5)
 		{
 			// 必要なパラメータあり
 
@@ -40,7 +43,12 @@ public class UploadImage
 
 			Connection connection = DriverManager.getConnection(dbUrl);
 
-			Title1 title = TitleCollection.getOneTitle(connection, titleId);
+			Title1 title = TitleCollection.getOneTitle1(connection, titleId);
+			String dmmUrlCid = null;
+			if (title.dmmUrl != null)
+			{
+				dmmUrlCid = Title1.getCid(title.dmmUrl);
+			}
 
 			// 現在の画像数を求める
 			ArrayList<Image> imageFiles = ImageCollection.getFileNamesById(connection, titleId);
@@ -56,9 +64,8 @@ public class UploadImage
 
 			int imageId = lastImageId + 1;
 
-			ArrayList<String> uploadedFiles =
-				ImageCollection.uploadFiles
-					(connection, folderPath, uploadfile, dmmUrlCid, titleId, imageId, uploadImageMargin);
+			ImageCollection.uploadFiles
+				(connection, folderPath, uploadfile, dmmUrlCid, Integer.valueOf(titleId), imageId, uploadImageMargin);
 
 			connection.close();
 		}
