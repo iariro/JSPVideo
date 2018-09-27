@@ -1,19 +1,12 @@
 package kumagai.av.upload;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.ArrayList;
-
-import com.microsoft.sqlserver.jdbc.SQLServerDriver;
-
-import kumagai.av.Image;
-import kumagai.av.ImageCollection;
-import kumagai.av.Title1;
-import kumagai.av.TitleCollection;
+import java.net.HttpURLConnection;
+import java.util.HashMap;
 
 /**
  * 画像ファイルアップロード。
@@ -23,54 +16,37 @@ public class UploadImage
 {
 	/**
 	 * 画像ファイルアップロード。
-	 * @param args [0]=変換元 [1]=変換先
-	 * @throws IOException
-	 * @throws SQLException
+	 * @param args [0]=titleID [1]=DMMCID [2]=folderPath [3]=imageMargin
 	 */
 	static public void main(String [] args)
-		throws IOException, SQLException
 	{
-		if (args.length < 5)
+		if (args.length < 3)
 		{
-			System.out.println("Usage : dbUrl titleId folderPath filePath imageMargin");
+			System.out.println("Usage : titleId DMMCID folderPath imageMargin");
 			return;
 		}
 
-		String dbUrl = args[0];
-		String titleId = args[1];
-		String folderPath = args[2];
-		File [] uploadfile = new File(args[3]).listFiles();
-		String uploadImageMargin = args[4];
+		String titleId = args[0];
+		String dmmUrlCid = args[1];
+		File [] files = new File(args[2]).listFiles();
+		String uploadImageMargin = args[3];
 
-		DriverManager.registerDriver(new SQLServerDriver());
-
-		Connection connection = DriverManager.getConnection(dbUrl);
-
-		Title1 title = TitleCollection.getOneTitle1(connection, titleId);
-		String dmmUrlCid = null;
-		if (title.dmmUrl != null)
+		for (File file : files)
 		{
-			dmmUrlCid = Title1.getCid(title.dmmUrl);
-		}
-
-		// 現在の画像数を求める
-		ArrayList<Image> imageFiles = ImageCollection.getFileNamesById(connection, titleId);
-
-		int lastImageId = 0;
-		for (Image image : imageFiles)
-		{
-			if (lastImageId < Integer.valueOf(image.position))
+			if (file.isFile())
 			{
-				lastImageId = Integer.valueOf(image.position);
+				MultipartUtility multipartUtility =
+					new MultipartUtility("http://192.168.10.10:8080/kumagai/av/uploadimage.action", "utf-8");
+				multipartUtility.addFormField("titleId", titleId);
+				multipartUtility.addFormField("dmmUrlCid", dmmUrlCid);
+				multipartUtility.addFilePart("uploadfile", file);
+				ArrayList<String> results = multipartUtility.finish();
+				for (String result : results)
+				{
+					System.out.printf("%s %s\n", file, result);
+				}
+				break;
 			}
 		}
-
-		int imageId = lastImageId + 1;
-
-		URL url = new URL("http://192.168.10.10:8080/kumagai/av/uploadimage.action");
-		ImageCollection.uploadFiles
-			(connection, folderPath, uploadfile, dmmUrlCid, Integer.valueOf(titleId), imageId, uploadImageMargin);
-
-		connection.close();
 	}
 }
