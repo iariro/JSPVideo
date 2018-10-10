@@ -314,7 +314,7 @@ public class ImageCollection
 	 * @param filePath 画像フォルダ
 	 * @return 画像リスト
 	 */
-	static public ArrayList<FileAndDatetime> getNewImageFilst(String filePath)
+	static public ArrayList<FileAndDatetime> getNewImageFieList(String filePath)
 	{
 		ArrayList<String> files = new RecursiveFilePathArray(filePath);
 

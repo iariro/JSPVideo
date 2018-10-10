@@ -36,7 +36,7 @@ public class NewImageListAction
 		{
 			try
 			{
-				newImageFilst = ImageCollection.getNewImageFilst(filePath);
+				newImageFilst = ImageCollection.getNewImageFieList(filePath);
 
 				return "success";
 			}
