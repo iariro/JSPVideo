@@ -1,12 +1,7 @@
 package kumagai.av.upload;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.IOException;
-import java.net.URL;
-import java.net.HttpURLConnection;
-import java.util.HashMap;
 
 /**
  * 画像ファイルアップロード。
@@ -17,8 +12,9 @@ public class UploadImage
 	/**
 	 * 画像ファイルアップロード。
 	 * @param args [0]=titleID [1]=DMMCID [2]=folderPath [3]=imageMargin
+	 * @throws IOException 
 	 */
-	static public void main(String [] args)
+	static public void main(String [] args) throws IOException
 	{
 		if (args.length < 3)
 		{
@@ -40,11 +36,8 @@ public class UploadImage
 				multipartUtility.addFormField("titleId", titleId);
 				multipartUtility.addFormField("dmmUrlCid", dmmUrlCid);
 				multipartUtility.addFilePart("uploadfile", file);
-				ArrayList<String> results = multipartUtility.finish();
-				for (String result : results)
-				{
-					System.out.printf("%s %s\n", file, result);
-				}
+				String result = multipartUtility.finish();
+				System.out.printf("%s %s\n", file, result);
 				break;
 			}
 		}

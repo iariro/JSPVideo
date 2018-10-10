@@ -1,4 +1,4 @@
-package kumagai.av.utility;
+package kumagai.av.upload;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
