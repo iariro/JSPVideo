@@ -14,6 +14,7 @@ import kumagai.av.DBInfo;
 import kumagai.av.Image;
 import kumagai.av.ImageCollection;
 import kumagai.av.InvalidImageFiles;
+import kumagai.av.RecursiveFilePathArray;
 
 public class AddImagesTest
 {
@@ -35,7 +36,7 @@ public class AddImagesTest
 
 		ImageCollection imageCollection = new ImageCollection(connection);
 		InvalidImageFiles notRefferedImage =
-			imageCollection.getNotExistFiles(filePath);
+			imageCollection.getNotExistFiles(new RecursiveFilePathArray(filePath));
 
 		Pattern pattern = Pattern.compile("_(\\d*)\\.");
 

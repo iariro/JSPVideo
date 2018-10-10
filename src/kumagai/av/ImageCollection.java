@@ -333,11 +333,9 @@ public class ImageCollection
 	 * @param filePath 画像フォルダパス
 	 * @return 存在しないファイル参照コレクション
 	 */
-	public InvalidImageFiles getNotExistFiles(String filePath)
+	public InvalidImageFiles getNotExistFiles(ArrayList<File> files)
 	{
 		InvalidImageFiles invalidImageFiles = new InvalidImageFiles();
-
-		ArrayList<File> files = new RecursiveFilePathArray(filePath);
 
 		for (File file : files)
 		{

@@ -1,12 +1,31 @@
 package kumagai.av.struts2;
 
-import java.sql.*;
-import java.util.*;
-import javax.servlet.*;
-import com.microsoft.sqlserver.jdbc.*;
-import org.apache.struts2.*;
-import org.apache.struts2.convention.annotation.*;
-import kumagai.av.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import javax.servlet.ServletContext;
+
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import kumagai.av.DateAndInt;
+import kumagai.av.DiaryReviewCollection;
+import kumagai.av.FilenameAndCount;
+import kumagai.av.Image;
+import kumagai.av.ImageCollection;
+import kumagai.av.InvalidImageFiles;
+import kumagai.av.RecursiveFilePathArray;
+import kumagai.av.Title1;
+import kumagai.av.TitleCollection;
+import kumagai.av.WatchCollection;
+import kumagai.av.WatchInformation;
 
 /**
  * DB・ファイルエラーチェックアクション。
@@ -52,7 +71,7 @@ public class ErrorCheckAction
 			ImageCollection imageCollection = new ImageCollection(connection);
 
 			InvalidImageFiles invalidImageFiles =
-				imageCollection.getNotExistFiles(filePath);
+				imageCollection.getNotExistFiles(new RecursiveFilePathArray(filePath));
 
 			notReferredFiles = invalidImageFiles.notReferredFiles;
 			notExistFiles = invalidImageFiles.notExistFiles;
