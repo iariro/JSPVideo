@@ -1,10 +1,17 @@
 package kumagai.av.struts2;
 
-import java.util.*;
-import javax.servlet.*;
-import org.apache.struts2.*;
-import org.apache.struts2.convention.annotation.*;
-import kumagai.av.*;
+import java.util.ArrayList;
+
+import javax.servlet.ServletContext;
+
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
+
+import kumagai.av.FileAndDatetime;
+import kumagai.av.RecursiveFilePathArray;
 
 /**
  * 画像リスト表示アクション用フォーム。
@@ -36,7 +43,8 @@ public class NewImageListAction
 		{
 			try
 			{
-				newImageFilst = ImageCollection.getNewImageFieList(filePath);
+				RecursiveFilePathArray recursiveFilePathArray = new RecursiveFilePathArray(filePath);
+				newImageFilst = recursiveFilePathArray.getNewImageFiles();
 
 				return "success";
 			}

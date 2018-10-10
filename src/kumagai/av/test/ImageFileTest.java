@@ -1,9 +1,13 @@
 package kumagai.av.test;
 
-import java.io.*;
-import java.util.*;
-import ktool.datetime.*;
-import kumagai.av.*;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+import ktool.datetime.DateTime;
+import kumagai.av.FileAndDatetime;
+import kumagai.av.RecursiveFilePathArray;
 
 public class ImageFileTest
 {
@@ -12,13 +16,13 @@ public class ImageFileTest
 	 */
 	public static void main(String[] args)
 	{
-		ArrayList<String> files = new RecursiveFilePathArray(AddImagesTest.filePath);
+		ArrayList<File> files = new RecursiveFilePathArray(AddImagesTest.filePath);
 
 		ArrayList<FileAndDatetime> fileAndDatetimes = new ArrayList<FileAndDatetime>();
-		for (String file : files)
+		for (File file : files)
 		{
-			long updateDate = new File(AddImagesTest.filePath, file).lastModified();
-			fileAndDatetimes.add(new FileAndDatetime(file, new DateTime(updateDate)));
+			long updateDate = file.lastModified();
+			fileAndDatetimes.add(new FileAndDatetime(file.getPath(), new DateTime(updateDate)));
 		}
 
 		Collections.sort(

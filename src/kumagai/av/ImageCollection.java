@@ -9,12 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 import javax.imageio.ImageIO;
 
-import ktool.datetime.DateTime;
 import kumagai.av.imageutility.FilenameAndTitleCollection;
 
 /**
@@ -310,46 +307,6 @@ public class ImageCollection
 	}
 
 	/**
-	 * 画像ファイルの更新日時から最新の画像ファイルを取得
-	 * @param filePath 画像フォルダ
-	 * @return 画像リスト
-	 */
-	static public ArrayList<FileAndDatetime> getNewImageFieList(String filePath)
-	{
-		ArrayList<String> files = new RecursiveFilePathArray(filePath);
-
-		ArrayList<FileAndDatetime> fileAndDatetimes = new ArrayList<FileAndDatetime>();
-		for (String file : files)
-		{
-			if (file.endsWith("jpg") || file.endsWith("jpeg"))
-			{
-				// JPEGファイル
-
-				long updateDate = new File(filePath, file).lastModified();
-				fileAndDatetimes.add(new FileAndDatetime(file, new DateTime(updateDate)));
-			}
-		}
-
-		Collections.sort(
-			fileAndDatetimes,
-			new Comparator<FileAndDatetime>()
-			{
-				public int compare(FileAndDatetime item1, FileAndDatetime item2)
-				{
-					return - item1.updatedate.compareTo(item2.updatedate);
-				}
-			});
-
-		ArrayList<FileAndDatetime> fileAndDatetimes2 = new ArrayList<FileAndDatetime>();
-		for (int i=0 ; i<fileAndDatetimes.size() ; i++)
-		{
-			fileAndDatetimes2.add(fileAndDatetimes.get(i));
-		}
-
-		return fileAndDatetimes2;
-	}
-
-	/**
 	 * 全画像情報のコレクションを構築。
 	 * @param connection DB接続オブジェクト
 	 */
@@ -380,11 +337,11 @@ public class ImageCollection
 	{
 		InvalidImageFiles invalidImageFiles = new InvalidImageFiles();
 
-		ArrayList<String> files = new RecursiveFilePathArray(filePath);
+		ArrayList<File> files = new RecursiveFilePathArray(filePath);
 
-		for (String file : files)
+		for (File file : files)
 		{
-			invalidImageFiles.notReferredFiles.add(file);
+			invalidImageFiles.notReferredFiles.add(file.getPath());
 		}
 
 		for (Image image : this)
