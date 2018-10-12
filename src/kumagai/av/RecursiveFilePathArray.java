@@ -38,13 +38,16 @@ public class RecursiveFilePathArray
 		}
 	}
 
+	private final String basePath;
+
 	/**
 	 * 再帰的にファイルパスのコレクションを構築。
-	 * @param file ディレクトリ
+	 * @param basePath ディレクトリ
 	 */
-	public RecursiveFilePathArray(String file)
+	public RecursiveFilePathArray(String basePath)
 	{
-		searchRecursive(null, new File(file));
+		this.basePath = basePath;
+		searchRecursive(null, new File(basePath));
 	}
 
 	/**
@@ -77,6 +80,8 @@ public class RecursiveFilePathArray
 	 */
 	public ArrayList<FileAndDatetime> getNewImageFiles()
 	{
+		int basePathLength = new File(basePath).getPath().length() + 1;
+
 		ArrayList<FileAndDatetime> fileAndDatetimes = new ArrayList<FileAndDatetime>();
 		for (File file : this)
 		{
@@ -85,7 +90,7 @@ public class RecursiveFilePathArray
 				// JPEGファイル
 
 				long updateDate = file.lastModified();
-				fileAndDatetimes.add(new FileAndDatetime(file.getPath(), new DateTime(updateDate)));
+				fileAndDatetimes.add(new FileAndDatetime(file.getPath().substring(basePathLength), new DateTime(updateDate)));
 			}
 		}
 
