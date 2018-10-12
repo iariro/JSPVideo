@@ -1,13 +1,10 @@
 package kumagai.av;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-
-import javax.imageio.ImageIO;
 
 import ktool.datetime.DateTime;
 
@@ -27,12 +24,16 @@ public class RecursiveFilePathArray
 	{
 		if (args.length >= 1)
 		{
+			String basePath = args[0];
 			RecursiveFilePathArray files = new RecursiveFilePathArray(args[0]);
+			DateTime time1 = new DateTime();
 			ArrayList<File> dmmPlayerSliderFiles = files.findDmmPlayerSlider();
+			DateTime time2 = new DateTime();
+			System.out.println(time2.diff(time1));
 
 			for (File file : dmmPlayerSliderFiles)
 			{
-				System.out.println(file);
+				System.out.println(file.getAbsolutePath().substring(basePath.length()));
 			}
 		}
 	}
@@ -118,8 +119,7 @@ public class RecursiveFilePathArray
 
 		for (File file : this)
 		{
-			BufferedImage image = ImageIO.read(file);
-			if (image.getRGB(20, 200) == 0x00a0f0)
+			if (Image.judgeDmmWithTimebar(file))
 			{
 				files.add(file);
 			}

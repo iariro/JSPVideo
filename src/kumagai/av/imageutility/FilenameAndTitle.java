@@ -15,7 +15,7 @@ public class FilenameAndTitle
 
 	/**
 	 * DBレコードの値をフィールドに割り当てる
-	 * @param result DBレコード
+	 * @param results DBレコード
 	 */
 	public FilenameAndTitle(ResultSet results)
 		throws SQLException

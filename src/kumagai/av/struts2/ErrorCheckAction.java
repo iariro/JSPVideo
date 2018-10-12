@@ -1,5 +1,6 @@
 package kumagai.av.struts2;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.ArrayList;
@@ -26,6 +27,8 @@ import kumagai.av.Title1;
 import kumagai.av.TitleCollection;
 import kumagai.av.WatchCollection;
 import kumagai.av.WatchInformation;
+import kumagai.av.imageutility.FilenameAndTitle;
+import kumagai.av.imageutility.FilenameAndTitleCollection;
 
 /**
  * DB・ファイルエラーチェックアクション。
@@ -39,6 +42,8 @@ import kumagai.av.WatchInformation;
 })
 public class ErrorCheckAction
 {
+	public String checkDmmTimebar;
+
 	public ArrayList<String> notReferredFiles;
 	public ArrayList<String> notExistFiles;
 	public ArrayList<FilenameAndCount> duplicateFiles;
@@ -48,6 +53,7 @@ public class ErrorCheckAction
 	public ArrayList<WatchInformation> notExistTitleWatch;
 	public ArrayList<WatchInformation> invalidDate;
 	public ArrayList<DateAndInt> duplicateReview;
+	public ArrayList<FilenameAndTitle> dmmTimeberImage;
 
 	/**
 	 * DB・ファイルエラーチェックアクション。
@@ -71,7 +77,7 @@ public class ErrorCheckAction
 			ImageCollection imageCollection = new ImageCollection(connection);
 
 			InvalidImageFiles invalidImageFiles =
-				imageCollection.getNotExistFiles(new RecursiveFilePathArray(filePath));
+				imageCollection.getNotExistFiles(filePath, new RecursiveFilePathArray(filePath));
 
 			notReferredFiles = invalidImageFiles.notReferredFiles;
 			notExistFiles = invalidImageFiles.notExistFiles;
@@ -82,6 +88,21 @@ public class ErrorCheckAction
 			notExistTitleWatch = WatchCollection.getNotExistTitleWatch(connection);
 			invalidDate = WatchCollection.getInvalidDate(connection);
 			duplicateReview = DiaryReviewCollection.getDuplicateReview(connection);
+
+			if (checkDmmTimebar != null && checkDmmTimebar.length() > 0)
+			{
+				dmmTimeberImage = new ArrayList<FilenameAndTitle>();
+				FilenameAndTitleCollection allImageAndTitle =
+					ImageCollection.getAllImageAndTitle(connection);
+				for (FilenameAndTitle image : allImageAndTitle)
+				{
+					File file = new File(filePath, image.filename);
+					if (Image.judgeDmmWithTimebar(file))
+					{
+						dmmTimeberImage.add(image);
+					}
+				}
+			}
 
 			connection.close();
 

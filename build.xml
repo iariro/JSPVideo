@@ -92,6 +92,7 @@
 		<copy todir="${TOMCAT_SITE_HOME}/WEB-INF/classes">
 			<fileset dir="bin">
 				<include name="kumagai/av/*.class" />
+				<include name="kumagai/av/imageutility/*.class" />
 				<include name="kumagai/av/struts2/*.class" />
 				<include name="kumagai/av/servlet/*.class" />
 			</fileset>

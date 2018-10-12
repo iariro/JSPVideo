@@ -19,8 +19,8 @@ public class ImageForChangePosition
 	/**
 	 * 指定の画像情報と前後位置情報をメンバーに割り当てる
 	 * @param image 画像情報
-	 * @param positionBefore
-	 * @param positionAfter
+	 * @param idBefore 前位置分ID
+	 * @param idAfter 後位置分ID
 	 */
 	public ImageForChangePosition(Image image, Integer idBefore, Integer idAfter)
 	{

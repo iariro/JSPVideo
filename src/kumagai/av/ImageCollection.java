@@ -329,17 +329,19 @@ public class ImageCollection
 	}
 
 	/**
-	 * 存在しないファイルへの参照を取得する。
-	 * @param filePath 画像フォルダパス
-	 * @return 存在しないファイル参照コレクション
+	 * 存在しないファイルへの参照・参照されていないファイルを検出する。
+	 * @param basePath 画像フォルダパス
+	 * @param files 存在するファイル
+	 * @return 存在しないファイル参照・参照されていないファイルのリスト
 	 */
-	public InvalidImageFiles getNotExistFiles(ArrayList<File> files)
+	public InvalidImageFiles getNotExistFiles(String basePath, ArrayList<File> files)
 	{
 		InvalidImageFiles invalidImageFiles = new InvalidImageFiles();
 
+		int basePathLength = new File(basePath).getAbsolutePath().length() + 1;
 		for (File file : files)
 		{
-			invalidImageFiles.notReferredFiles.add(file.getPath());
+			invalidImageFiles.notReferredFiles.add(file.getPath().substring(basePathLength));
 		}
 
 		for (Image image : this)
@@ -431,7 +433,7 @@ public class ImageCollection
 	/**
 	 * 画像のアップロード
 	 * @param connection DB接続オブジェクト
-	 * @param subFolder 画像格納フォルダ
+	 * @param folderPath 画像格納フォルダ
 	 * @param uploadfiles 画像の配列
 	 * @param dmmUrlCid DMM上のタイトルCID
 	 * @param titleId タイトルID

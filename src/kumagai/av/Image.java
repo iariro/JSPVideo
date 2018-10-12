@@ -1,8 +1,13 @@
 package kumagai.av;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 /**
  * 画像情報。
@@ -10,6 +15,49 @@ import java.util.ArrayList;
  */
 public class Image
 {
+	/**
+	 * DMMプレイヤーのタイムバー映り込みを判定
+	 * @return true=移り込みあり／false=なし
+	 */
+	static public boolean judgeDmmWithTimebar(File file)
+		throws IOException
+	{
+		BufferedImage image = ImageIO.read(file);
+
+		if ((image != null) &&
+			(image.getWidth() >= 20 && image.getHeight() >= 340))
+		{
+			int rgb = image.getRGB(20, 346);
+			int g = (rgb & 0xff00) >> 8;
+			int b = (rgb & 0xff);
+
+			if ((getAbsoluteDiff((rgb & 0xff0000) >> 16, 0) <= 10) &&
+				(getAbsoluteDiff(b, 0xff) <= 10) &&
+				(getAbsoluteDiff(g, 0xa3) <= 10))
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * 色の差を絶対値で求める
+	 * @param color1 色１
+	 * @param color2 色２
+	 * @return 差
+	 */
+	static int getAbsoluteDiff(int color1, int color2)
+	{
+		int diff = color1 - color2;
+		if (diff < 0)
+		{
+			diff *= -1;
+		}
+		return diff;
+	}
+
 	public final int id;
 	public final int titleId;
 	public final String position;

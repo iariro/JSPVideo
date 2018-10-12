@@ -92,7 +92,7 @@ public class AddBulkImagesAction
 
 		ImageCollection imageCollection = new ImageCollection(connection);
 		InvalidImageFiles notRefferedImage =
-			imageCollection.getNotExistFiles(new RecursiveFilePathArray(filePath));
+			imageCollection.getNotExistFiles(filePath, new RecursiveFilePathArray(filePath));
 
 		Pattern pattern = Pattern.compile("_(\\d*)\\.");
 

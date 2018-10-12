@@ -5,7 +5,7 @@
 <html>
 	<head>
 		<title>AV - エラーチェック</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<link rel="stylesheet" type="text/css" href="hatena.css">
 	</head>
 
@@ -81,6 +81,16 @@
 				<li><s:property value="date" />=<s:property value="count" />
 			</s:iterator>
 			</ul>
+
+			<s:if test="%{checkDmmTimebar != null}">
+				<h2>DMMタイムバー映り込み</h2>
+
+				<ul>
+				<s:iterator value="dmmTimeberImage">
+					<li><s:property value="title" /> - <s:property value="filename" />
+				</s:iterator>
+				</ul>
+			</s:if>
 
 			<h2>タイトル メモ</h2>
 

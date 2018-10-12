@@ -102,7 +102,8 @@
 			</s:form>
 
 			<s:form action="errorcheck" theme="simple">
-				<s:submit value="エラーチェック" />
+				<s:submit value="エラーチェック" /><br>
+				<input type="checkbox" name="checkDmmTimebar">DMMタイムバー検出
 			</s:form>
 
 		</td>

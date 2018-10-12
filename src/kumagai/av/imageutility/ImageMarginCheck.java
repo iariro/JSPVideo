@@ -21,6 +21,7 @@ public class ImageMarginCheck
 {
 	/**
 	 * 画像の余白やDMMプレイヤーのコントロールを検出
+	 * @param args no use
 	 */
 	static public void main(String[] args)
 		throws SQLException, IOException
