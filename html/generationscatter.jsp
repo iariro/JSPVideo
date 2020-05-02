@@ -10,7 +10,7 @@
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 		<script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
 		<script type="text/javascript" src="dateformat.js"></script>
-		<title>SMART Viewer</title>
+		<title>AV</title>
 	</head>
 
 	<body>
