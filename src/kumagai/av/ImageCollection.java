@@ -431,6 +431,41 @@ public class ImageCollection
 	}
 
 	/**
+	 * PNGからjPEGへの変換とリサイズ。
+	 * @param sourceFile 元ファイル
+	 * @param destinationFile 出力ファイル
+	 */
+	public static void toJpegAndResizeAuto(File sourceFile, File destinationFile)
+		throws IOException
+	{
+		BufferedImage sourceImage = ImageIO.read(sourceFile);
+		MovieRectangle rectangle = ImageTrimming.findMovieOutline(sourceImage);
+		int width = sourceImage.getWidth();
+		int height = sourceImage.getHeight();
+		int width2 = rectangle.getWidth();
+		int height2 = rectangle.getHeight();
+
+		while ((width2 > maxWidth) || (height2 > maxHeight))
+		{
+			width /= 2;
+			height /= 2;
+			width2 /= 2;
+			height2 /= 2;
+			rectangle.x1 /= 2;
+			rectangle.y1 /= 2;
+		}
+
+		BufferedImage resizeImage =
+			new BufferedImage(width2-1, height2, BufferedImage.TYPE_INT_RGB);
+		java.awt.Image resizeImage2 =
+			sourceImage.getScaledInstance
+				(width, height, java.awt.Image.SCALE_AREA_AVERAGING);
+		resizeImage.getGraphics().drawImage
+			(resizeImage2, -rectangle.x1, -rectangle.y1, width, height, null);
+		ImageIO.write(resizeImage, "jpg", destinationFile);
+	}
+
+	/**
 	 * 画像のアップロード
 	 * @param connection DB接続オブジェクト
 	 * @param folderPath 画像格納フォルダ
@@ -450,7 +485,7 @@ public class ImageCollection
 		int uploadImageMarginX = 0;
 		int uploadImageMarginY = 0;
 
-		if (uploadImageMargin != null)
+		if (uploadImageMargin != null && !uploadImageMargin.equals("auto"))
 		{
 			// 指定あり
 
@@ -481,11 +516,22 @@ public class ImageCollection
 			File destinationFile = new File(subFolder, destinationFileName);
 
 			// リサイズ
-			ImageCollection.toJpegAndResize(
-				uploadfiles[i],
-				destinationFile,
-				uploadImageMarginX,
-				uploadImageMarginY);
+			if (uploadImageMargin.equals("auto"))
+			{
+				// auto margin
+
+				ImageCollection.toJpegAndResizeAuto(uploadfiles[i], destinationFile);
+			}
+			else
+			{
+				// specified margin
+
+				ImageCollection.toJpegAndResize(
+					uploadfiles[i],
+					destinationFile,
+					uploadImageMarginX,
+					uploadImageMarginY);
+			}
 
 			destinationFileName =
 				new File(
