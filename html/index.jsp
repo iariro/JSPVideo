@@ -77,6 +77,10 @@
 				<s:select name="costumeAndScore" list="#{ 'ブルマ,3':'ブルマ３', 'ブルマ,2':'ブルマ２', 'ブルマ,1':'ブルマ１', 'ネクタイ,2':'ネクタイ' }" />
 			</s:form>
 
+			<s:form action="shufflelist" theme="simple">
+				<s:submit value="シャッフルリスト表示" />
+			</s:form>
+
 		</td>
 		<td>
 
