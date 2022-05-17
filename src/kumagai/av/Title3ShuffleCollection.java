@@ -1,7 +1,12 @@
 package kumagai.av;
 
-import java.util.*;
-import ktool.datetime.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Random;
+
+import ktool.datetime.DateTime;
+import ktool.datetime.TimeSpan;
 
 /**
  * シャッフル済みタイトルコレクション。
@@ -12,6 +17,7 @@ public class Title3ShuffleCollection
 	private final Title3 title1;
 	private final Title3 title2;
 	private final Title3 title3;
+	private final DateTime startDate;
 
 	/**
 	 * 指定のコレクションのシャッフル済みコレクションを生成する。
@@ -53,6 +59,9 @@ public class Title3ShuffleCollection
 
 		int index = diff.getDay() + randomAdjust;
 
+		startDate = new DateTime(originDate2);
+		startDate.addDay(-randomAdjust);
+
 		// ２周目以降の場合は並びを変えるようランダム値調整。
 		if (titleCollection.size() > 0)
 		{
@@ -63,11 +72,13 @@ public class Title3ShuffleCollection
 				for (int i=0 ; i<titleCollection.size() ; i++)
 				{
 					random.nextInt();
+					startDate.addDay(1);
 				}
 
 				index -= titleCollection.size();
 			}
 		}
+
 
 		// タイトルのコレクションをシャッフル。
 		for (Title3 title : titleCollection)
@@ -152,5 +163,14 @@ public class Title3ShuffleCollection
 	public Title3 getTitle3()
 	{
 		return title3;
+	}
+
+	/**
+	 * 開始日を取得
+	 * @return 開始日
+	 */
+	public DateTime getStartDate()
+	{
+		return startDate;
 	}
 }

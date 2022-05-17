@@ -21,16 +21,15 @@
 		<table>
 			<tr>
 				<th></th>
+				<th>日</th>
 				<th>タイトル</th>
 			</tr>
 
 			<s:iterator value="titleCollectionRandom" var="title">
 				<tr>
-				<td>
-				<s:if test="title == titleCollectionRandom.title2">★</s:if>
-				</td>
-
-				<td><s:property value="title.title" /></td>
+				<td><s:if test="today">★</s:if></td>
+				<td><s:property value="date" /></td>
+				<td><s:property value="title" /></td>
 				</tr>
 			</s:iterator>
 		</table>

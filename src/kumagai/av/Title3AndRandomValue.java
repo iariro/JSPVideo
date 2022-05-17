@@ -1,6 +1,6 @@
 package kumagai.av;
 
-import java.util.*;
+import java.util.Random;
 
 /**
  * タイトル情報。ソート用。

@@ -32,7 +32,31 @@ import kumagai.av.TitleCollection;
 })
 public class ShuffleListAction
 {
-	public Title3ShuffleCollection titleCollectionRandom;
+	/**
+	 * シャッフルリストデータ型
+	 * @author kumagai
+	 */
+	class DateAndTitle
+	{
+		public boolean today;
+		public String date;
+		public String title;
+
+		/**
+		 * 値を割り当て
+		 * @param today 当日フラグ
+		 * @param date 日付
+		 * @param title タイトル
+		 */
+		public DateAndTitle(boolean today, String date, String title)
+		{
+			this.today = today;
+			this.date = date;
+			this.title = title;
+		}
+	}
+
+	public ArrayList<DateAndTitle> titleCollectionRandom;
 
 	public String message;
 	public Exception exception;
@@ -84,9 +108,21 @@ public class ShuffleListAction
 
 			DateTime today = new DateTime();
 
-			titleCollectionRandom =
+			Title3ShuffleCollection titleCollectionRandom =
 				new Title3ShuffleCollection
 					(titleCollection, originDate, today, randomAdjust);
+
+			this.titleCollectionRandom = new ArrayList<ShuffleListAction.DateAndTitle>();
+			DateTime d = titleCollectionRandom.getStartDate();
+			for (int i=0 ; i<titleCollectionRandom.size() ; i++)
+			{
+				this.titleCollectionRandom.add(
+					new DateAndTitle(
+						d.getYear() == today.getYear() && d.getMonth() == today.getMonth() && d.getDay() == today.getDay(),
+						d.toString(),
+						titleCollectionRandom.get(i).title.title));
+				d.addDay(1);
+			}
 
 			return "success";
 		}
