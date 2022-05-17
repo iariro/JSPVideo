@@ -118,7 +118,7 @@ public class ShuffleListAction
 			{
 				this.titleCollectionRandom.add(
 					new DateAndTitle(
-						d.getYear() == today.getYear() && d.getMonth() == today.getMonth() && d.getDay() == today.getDay(),
+						d.isSameDate(today),
 						d.toString(),
 						titleCollectionRandom.get(i).title.title));
 				d.addDay(1);
