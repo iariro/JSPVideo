@@ -28,7 +28,7 @@
 			<s:iterator value="titleCollectionRandom" var="title">
 				<tr>
 				<td><s:if test="today">★</s:if></td>
-				<td><s:property value="date" /></td>
+				<td bgcolor='<s:property value="bgcolor" />'><s:property value="date" /></td>
 				<td><s:property value="title" /></td>
 				</tr>
 			</s:iterator>

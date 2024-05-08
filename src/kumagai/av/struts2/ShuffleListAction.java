@@ -40,18 +40,35 @@ public class ShuffleListAction
 	{
 		public boolean today;
 		public String date;
+		public String bgcolor;
 		public String title;
 
 		/**
 		 * 値を割り当て
 		 * @param today 当日フラグ
 		 * @param date 日付
+		 * @param dayOfWeek 曜日
 		 * @param title タイトル
 		 */
-		public DateAndTitle(boolean today, String date, String title)
+		public DateAndTitle(boolean today, String date, int dayOfWeek, String title)
 		{
 			this.today = today;
 			this.date = date;
+			switch (dayOfWeek)
+			{
+			case 1:
+				this.bgcolor = "pink";
+				break;
+			case 2:
+			case 3:
+			case 4:
+			case 5:
+			case 6:
+				break;
+			case 7:
+				this.bgcolor = "lightblue";
+				break;
+			}
 			this.title = title;
 		}
 	}
@@ -120,6 +137,7 @@ public class ShuffleListAction
 					new DateAndTitle(
 						d.isSameDate(today),
 						d.toString(),
+						d.getDayOfWeek(),
 						titleCollectionRandom.get(i).title.title));
 				d.addDay(1);
 			}
