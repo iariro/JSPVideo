@@ -19,11 +19,11 @@
 			<h2><s:property value="title" /></h2>
 			<br>
 
-			<s:if test="%{dmmImageUrl!=null}">
+			<s:if test="%{useDmmTopImage}">
 				<img src="<s:property value="dmmImageUrl" />">
+				<br>
+				<br>
 			</s:if>
-			<br>
-			<br>
 
 			<s:iterator value="images">
 

@@ -30,6 +30,7 @@ public class UpdateTitle2Action
 	public String releaseDate;
 	public String memo;
 	public String dmmUrl;
+	public String useDmmTopImage;
 	public String imageFile1;
 	public String imageFile2;
 	public String imageFile3;
@@ -58,7 +59,8 @@ public class UpdateTitle2Action
 			type,
 			releaseDate,
 			memo,
-			dmmUrl);
+			dmmUrl,
+			useDmmTopImage != null);
 
 		String [] imageFiles =
 			new String [] { imageFile1, imageFile2, imageFile3 };

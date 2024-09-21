@@ -45,6 +45,13 @@
 					<td><input type="text" name="dmmUrl" value="<s:property value="dmmUrl" />" size="100"></td>
 				</tr>
 				<tr bgcolor="#eeeeff">
+					<td>DMMの画像を表示する</td>
+					<td>
+						<s:if test="useDmmTopImage"><input type="checkbox" name="useDmmTopImage" checked></s:if>
+						<s:else><input type="checkbox" name="useDmmTopImage"></s:else>
+					</td>
+				</tr>
+				<tr bgcolor="#eeeeff">
 					<td>画像１</td>
 					<td><input type="text" name="imageFile1" value="<s:property value="imageFile1" />"></td>
 				</tr>

@@ -24,6 +24,7 @@
 				<tr bgcolor="#eeeeff"><td>メモ</td><td><input type="text" name="memo" size="50"></td></tr>
 				<tr bgcolor="#eeeeff"><td>リリース日</td><td><input type="text" name="releaseDate"></td></tr>
 				<tr bgcolor="#eeeeff"><td>DMM URL</td><td><input type="text" name="dmmUrl" size="100"></td></tr>
+				<tr bgcolor="#eeeeff"><td>DMMの画像を使用する</td><td><input type="checkbox" name="useDmmTopImage"></td></tr>
 				<tr bgcolor="#eeeeff"><td>画像1</td><td><input type="text" name="imageFile1" size="50"></td></tr>
 				<tr bgcolor="#eeeeff"><td>画像2</td><td><input type="text" name="imageFile2" size="50"></td></tr>
 				<tr bgcolor="#eeeeff"><td>画像3</td><td><input type="text" name="imageFile3" size="50"></td></tr>

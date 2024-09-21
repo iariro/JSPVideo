@@ -1,8 +1,12 @@
 package kumagai.av;
 
-import java.sql.*;
-import java.text.*;
-import ktool.string.*;
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+import ktool.string.DateCollection;
 
 /**
  * タイトル情報。title・image・watchテーブルに対応する内容。
@@ -27,6 +31,7 @@ public class Title3
 	public final String media;
 	public final String fileName;
 	public final String dmmUrl;
+	public final boolean useDmmTopImage;
 	public final Date releaseDate;
 	public final String rentalDate;
 	public final String buyDate;
@@ -48,6 +53,7 @@ public class Title3
 		media = "DVD";
 		fileName = null;
 		this.dmmUrl = dmmUrl;
+		useDmmTopImage = true;
 		releaseDate = null;
 		rentalDate = null;
 		buyDate = null;
@@ -72,6 +78,7 @@ public class Title3
 		media = results.getString("type");
 		fileName = results.getString("filename");
 		dmmUrl = results.getString("dmmUrl");
+		useDmmTopImage = results.getBoolean("use_dmm_top_image");
 		releaseDate = results.getDate("releasedate");
 		rentalDate = results.getString("rentaldate");
 		buyDate = results.getString("buydate");
@@ -116,13 +123,14 @@ public class Title3
 	public String toString()
 	{
 		return String.format(
-			"%d %s %s %s %s %s releaseDate=%s rentalDate=%s %s %s %s %s %s",
+			"%d %s %s %s %s %s %s releaseDate=%s rentalDate=%s %s %s %s %s %s",
 			id,
 			title,
 			shortTitle,
 			media,
 			fileName,
 			dmmUrl,
+			useDmmTopImage ? "true" : "false",
 			releaseDate,
 			rentalDate,
 			buyDate,
@@ -300,5 +308,14 @@ public class Title3
 	public String getDmmImageUrlPl()
 	{
 		return Title1.getDmmImageUrlPl(dmmUrl);
+	}
+
+	/**
+	 * DMM画像使用フラグを返却
+	 * @return DMM画像使用フラグ
+	 */
+	public boolean getUseDmmTopImage()
+	{
+		return useDmmTopImage;
 	}
 }

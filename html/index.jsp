@@ -125,7 +125,7 @@
 			<td align="center" bgcolor="#dddddd">
 			<s:if test="%{title1 != null}">
 				<a href="imagelist.action?titleid=<s:property value="title1.id" />">
-				<s:if test="%{title1.dmmUrl != null && title1.dmmUrl.length()>0}">
+				<s:if test="%{title1.dmmUrl != null && title1.useDmmTopImage}">
 					<img src="<s:property value="title1.dmmImageUrlPl" />" width="100" height="67">
 				</s:if>
 				<s:else>
@@ -142,7 +142,7 @@
 			<s:if test="%{title2 != null}">
 				「<s:property value="title2.title" />」<br>
 				<a href="imagelist.action?titleid=<s:property value="title2.id" />">
-				<s:if test="%{title2.dmmUrl != null && title2.dmmUrl.length()>0}">
+				<s:if test="%{title2.dmmUrl != null && title2.useDmmTopImage}">
 					<img src="<s:property value="title2.dmmImageUrlPl" />" width="400" height="270">
 				</s:if>
 				<s:else>
@@ -158,7 +158,7 @@
 			<td align="center" bgcolor="#dddddd">
 			<s:if test="%{title3 != null}">
 				<a href="imagelist.action?titleid=<s:property value="title3.id" />">
-				<s:if test="%{title3.dmmUrl != null && title3.dmmUrl.length()>0}">
+				<s:if test="%{title3.dmmUrl != null && title3.useDmmTopImage}">
 					<img src="<s:property value="title3.dmmImageUrlPl" />" width="100" height="67">
 				</s:if>
 				<s:else>

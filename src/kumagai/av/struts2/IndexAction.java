@@ -1,14 +1,28 @@
 package kumagai.av.struts2;
 
-import java.sql.*;
-import java.text.*;
-import java.util.*;
-import javax.servlet.*;
-import com.microsoft.sqlserver.jdbc.*;
-import org.apache.struts2.*;
-import org.apache.struts2.convention.annotation.*;
-import ktool.datetime.*;
-import kumagai.av.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+
+import javax.servlet.ServletContext;
+
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+import com.microsoft.sqlserver.jdbc.SQLServerException;
+
+import ktool.datetime.DateTime;
+import kumagai.av.DBInfo;
+import kumagai.av.Title3;
+import kumagai.av.Title3ShuffleCollection;
+import kumagai.av.TitleCollection;
 
 /**
  * トップページ表示アクション。
@@ -35,6 +49,17 @@ public class IndexAction
 
 		formatDate1.applyPattern("yyyy/MM/dd");
 		formatDate2.applyPattern("yyyy/MM/dd(E)");
+	}
+
+	public static void main(String[] args) throws SQLException, ParseException
+	{
+		IndexAction action = new IndexAction();
+		Connection connection = DriverManager.getConnection(DBInfo.dbUrl);
+		DateTime today = new DateTime();
+		action.readTitleCollection(0, today, today, connection);
+		System.out.println(action.title1);
+		System.out.println(action.title2);
+		System.out.println(action.title3);
 	}
 
 	public Title3 title1;
@@ -68,21 +93,6 @@ public class IndexAction
 
 		try
 		{
-			Connection connection =
-				DriverManager.getConnection
-					(context.getInitParameter("AVSqlserverUrl"));
-
-			ArrayList<Title3> titleCollection =
-				new TitleCollection(
-					connection,
-					true,
-					true,
-					"buydate desc, indexinday",
-					null,
-					null);
-
-			connection.close();
-
 			String originDateString =
 				context.getInitParameter("AVRandomOriginDate");
 			int randomAdjust =
@@ -92,16 +102,13 @@ public class IndexAction
 
 			DateTime today = new DateTime();
 
-			Title3ShuffleCollection titleCollectionRandom =
-				new Title3ShuffleCollection
-					(titleCollection, originDate, today, randomAdjust);
+			Connection connection =
+					DriverManager.getConnection
+						(context.getInitParameter("AVSqlserverUrl"));
 
-			date1 = formatDate1.format(today.getDate());
-			date2 = formatDate2.format(today.getDate());
+			readTitleCollection(randomAdjust, originDate, today, connection);
 
-			title1 = titleCollectionRandom.getTitle1();
-			title2 = titleCollectionRandom.getTitle2();
-			title3 = titleCollectionRandom.getTitle3();
+			connection.close();
 
 			return "success";
 		}
@@ -111,5 +118,35 @@ public class IndexAction
 
 			return "error";
 		}
+	}
+
+	/**
+	 * タイトル情報を読み込む
+	 * @param randomAdjust 日補正
+	 * @param originDate 基準日
+	 * @param today 今日の日付
+	 * @param connection DB接続オブジェクト
+	 */
+	private void readTitleCollection(int randomAdjust, DateTime originDate, DateTime today, Connection connection)
+			throws SQLException, ParseException
+	{
+		ArrayList<Title3> titleCollection =
+			new TitleCollection(
+				connection,
+				true,
+				true,
+				"buydate desc, indexinday",
+				null,
+				null);
+
+		Title3ShuffleCollection titleCollectionRandom =
+			new Title3ShuffleCollection(titleCollection, originDate, today, randomAdjust);
+
+		date1 = formatDate1.format(today.getDate());
+		date2 = formatDate2.format(today.getDate());
+
+		title1 = titleCollectionRandom.getTitle1();
+		title2 = titleCollectionRandom.getTitle2();
+		title3 = titleCollectionRandom.getTitle3();
 	}
 }

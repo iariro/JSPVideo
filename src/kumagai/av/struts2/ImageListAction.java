@@ -36,6 +36,7 @@ public class ImageListAction
 	public String titleid;
 	public String title;
 	public String dmmImageUrl;
+	public boolean useDmmTopImage;
 	public ArrayList<ImageForChangePosition> images;
 	public String message;
 
@@ -60,6 +61,7 @@ public class ImageListAction
 
 				Title1 title = TitleCollection.getOneTitle1(connection, titleid);
 				this.title = title.title;
+				useDmmTopImage = title.useDmmTopImage;
 
 				ArrayList<Image> images = ImageCollection.getFileNamesById(connection, titleid);
 				this.images = new ArrayList<ImageForChangePosition>();

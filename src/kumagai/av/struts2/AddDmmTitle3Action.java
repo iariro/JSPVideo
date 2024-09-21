@@ -33,6 +33,7 @@ public class AddDmmTitle3Action
 	public String memo;
 	public String releaseDate;
 	public String dmmUrl;
+	public boolean useDmmTopImage;
 	public String rentalDate;
 	public String buyDate;
 
@@ -60,7 +61,7 @@ public class AddDmmTitle3Action
 				Connection connection = DriverManager.getConnection(dbUrl);
 
 				// タイトル追加
-				titleId = TitleCollection.insert(connection, title, type, memo, releaseDate, dmmUrl);
+				titleId = TitleCollection.insert(connection, title, type, memo, releaseDate, dmmUrl, useDmmTopImage);
 
 				// 視聴情報追加
 				WatchCollection.insertAsNew(connection, titleId, rentalDate, buyDate, null, memo);

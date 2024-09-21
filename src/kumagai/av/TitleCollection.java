@@ -45,14 +45,15 @@ public class TitleCollection
 	 * @param releaseDate リリース日
 	 * @param memo メモ
 	 * @param dmmUrl DMM URL
+	 * @param useDmmTopImage DMM画像を使用する
 	 */
 	static public void update(Connection connection, String titleId,
 		String title, String shortTitle, String type, String releaseDate,
-		String memo, String dmmUrl)
+		String memo, String dmmUrl, boolean useDmmTopImage)
 		throws SQLException
 	{
 		String sql =
-			"update title set title=?, shorttitle=?, type=?, releasedate=?, memo=?, dmmurl=? where id=?";
+			"update title set title=?, shorttitle=?, type=?, releasedate=?, memo=?, dmmurl=?, use_dmm_top_image=? where id=?";
 
 		PreparedStatement statement = connection.prepareStatement(sql);
 
@@ -62,7 +63,9 @@ public class TitleCollection
 		statement.setString(4, releaseDate);
 		statement.setString(5, memo);
 		statement.setString(6, dmmUrl);
-		statement.setString(7, titleId);
+		statement.setBoolean(7, useDmmTopImage);
+
+		statement.setString(8, titleId);
 
 		statement.executeUpdate();
 
@@ -78,14 +81,15 @@ public class TitleCollection
 	 * @param releaseDate リリース日
 	 * @param dmmUrl DMM URL
 	 * @return 生成したタイトルID
+	 * @param useDmmTopImage DMM画像を使用する
 	 */
 	static public int insert(Connection connection, String title, String type,
-		String memo, String releaseDate, String dmmUrl)
+		String memo, String releaseDate, String dmmUrl, boolean useDmmTopImage)
 		throws SQLException
 	{
 		PreparedStatement statement =
 			connection.prepareStatement(
-				"insert into title (title, type, memo, releasedate, dmmurl) values (?, ?, ?, ?, ?)",
+				"insert into title (title, type, memo, releasedate, dmmurl, use_dmm_top_image) values (?, ?, ?, ?, ?, ?)",
 				Statement.RETURN_GENERATED_KEYS);
 
 		statement.setString(1, title);
@@ -93,6 +97,7 @@ public class TitleCollection
 		statement.setString(3, memo);
 		statement.setString(4, releaseDate);
 		statement.setString(5, dmmUrl);
+		statement.setBoolean(6, useDmmTopImage);
 		statement.executeUpdate();
 
 		int newid;
@@ -133,7 +138,7 @@ public class TitleCollection
 		throws SQLException
 	{
 		String sql =
-			"select title, shorttitle, type, releasedate, memo, dmmurl from title where id=?";
+			"select title, shorttitle, type, releasedate, memo, dmmurl, use_dmm_top_image from title where id=?";
 
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setString(1, titleId);
@@ -332,7 +337,7 @@ public class TitleCollection
 		throws SQLException, ParseException
 	{
 		String sql =
-			"select title.id, title, shorttitle, type, filename, dmmurl, releasedate, w1.rentaldate, w1.buydate, title.memo as titlememo, w1.memo as watchmemo from title left join image on title.id=image.titleid left join watch w1 on title.id=w1.titleid where isnull(image.position,0) in (select min(position) from image where title.id=image.titleid union select 0) ";
+			"select title.id, title, shorttitle, type, filename, dmmurl, use_dmm_top_image, releasedate, w1.rentaldate, w1.buydate, title.memo as titlememo, w1.memo as watchmemo from title left join image on title.id=image.titleid left join watch w1 on title.id=w1.titleid where isnull(image.position,0) in (select min(position) from image where title.id=image.titleid union select 0) ";
 
 		if (date != null)
 		{

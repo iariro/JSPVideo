@@ -1,8 +1,11 @@
 package kumagai.av;
 
-import java.sql.*;
-import java.text.*;
-import java.util.regex.*;
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * タイトル情報。titleテーブルに対応する内容。
@@ -116,6 +119,7 @@ public class Title1
 	public final Date releaseDate;
 	public final String memo;
 	public final String dmmUrl;
+	public final boolean useDmmTopImage;
 
 	/**
 	 * DBのレコードからオブジェクトを構築する。
@@ -130,6 +134,7 @@ public class Title1
 		releaseDate = results.getDate("releasedate");
 		memo = results.getString("memo");
 		dmmUrl = results.getString("dmmUrl");
+		useDmmTopImage = results.getBoolean("use_dmm_top_image");
 	}
 
 	/**
