@@ -7,6 +7,9 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<title>AV</title>
 		<link rel="stylesheet" type="text/css" href="hatena.css">
+		<style>
+		img { object-fit: scale-down; }
+		</style>
 	</head>
 
 	<body>
